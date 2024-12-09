@@ -167,7 +167,7 @@ const CameraController = () => {
     const { alpha, beta, gamma } = animData.current;
 
     // Convert degrees to radians
-    const xRotation = THREE.MathUtils.degToRad(-90); // THREE.MathUtils.degToRad(beta - 90);
+    const xRotation = 0; // THREE.MathUtils.degToRad(-90); // THREE.MathUtils.degToRad(beta - 90);
     const yRotation = THREE.MathUtils.degToRad(alpha);
     const zRotation = 0; // THREE.MathUtils.degToRad(gamma);
 
