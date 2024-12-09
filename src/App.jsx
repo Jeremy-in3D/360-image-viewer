@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Sky, PerspectiveCamera } from "@react-three/drei";
+import {
+  OrbitControls,
+  Sky,
+  PerspectiveCamera,
+  useTexture,
+} from "@react-three/drei";
 import * as THREE from "three";
 import "./App.css";
 
@@ -80,6 +85,17 @@ const Map = ({ selectedImage, setSelectedImage }) => {
         }}
       ></div>
     </div>
+  );
+};
+
+const SphereImageTest = () => {
+  const texture = useTexture(imagePath);
+
+  return (
+    <mesh>
+      <sphereGeometry args={[500, 60, 40]} />
+      <meshBasicMaterial map={texture} side={THREE.BackSide} />
+    </mesh>
   );
 };
 
@@ -174,7 +190,7 @@ const Image360ViewerTest = () => {
         <PerspectiveCamera makeDefault ref={cameraRef} position={[0, 0, 0.1]} />
         <OrbitControls />
         <Suspense fallback={null}>
-          <SphereImage />
+          <SphereImageTest />
         </Suspense>
       </Canvas>
     </>
