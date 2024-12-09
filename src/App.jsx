@@ -122,7 +122,8 @@ const Image360Viewer = ({ imageSrc }) => {
 };
 
 const CameraController = () => {
-  const { camera } = useThree();
+  const camera = useThree((state) => state.camera);
+  const controlsRef = useRef();
   const animData = useRef({ alpha: 0, beta: 0, gamma: 0 });
 
   useEffect(() => {
@@ -144,7 +145,7 @@ const CameraController = () => {
       }
     };
 
-    // Put your button outside the effect in your return JSX to make this clean
+    // Ensure requests happen on a user gesture if needed
     requestPermission();
 
     return () => {
@@ -159,21 +160,25 @@ const CameraController = () => {
   };
 
   useFrame(() => {
-    if (camera) {
-      const { alpha, beta, gamma } = animData.current;
-
-      const xRotation = THREE.MathUtils.degToRad(beta); // Pitch
-      const yRotation = THREE.MathUtils.degToRad(alpha); // Yaw
-      const zRotation = THREE.MathUtils.degToRad(gamma); // Roll
-
-      camera.rotation.set(xRotation, yRotation, zRotation, "YXZ");
+    if (controlsRef.current) {
+      controlsRef.current.update();
     }
+
+    const { alpha, beta, gamma } = animData.current;
+
+    // Convert degrees to radians
+    const xRotation = THREE.MathUtils.degToRad(beta);
+    const yRotation = THREE.MathUtils.degToRad(alpha);
+    const zRotation = THREE.MathUtils.degToRad(gamma);
+
+    // Mix camera's interaction path with device orientation
+    camera.rotation.set(xRotation, yRotation, zRotation, "YXZ");
   });
 
-  return null;
+  return <OrbitControls ref={controlsRef} enableZoom={false} />;
 };
 
-const Image360ViewerTest = ({ imageSrc }) => {
+const Image360ViewerTest = () => {
   return (
     <div style={{ position: "relative" }}>
       <Canvas style={{ height: "400px" }}>
