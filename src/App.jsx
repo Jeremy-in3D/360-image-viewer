@@ -121,7 +121,7 @@ const Image360Viewer = ({ imageSrc }) => {
   );
 };
 
-const Image360ViewerTest = () => {
+const Image360ViewerTest = ({ imageSrc }) => {
   const cameraRef = useRef();
 
   const requestPermission = () => {
@@ -129,71 +129,65 @@ const Image360ViewerTest = () => {
       DeviceOrientationEvent.requestPermission()
         .then((permissionState) => {
           if (permissionState === "granted") {
-            window.addEventListener("deviceorientation", handleOrientation);
+            window.addEventListener(
+              "deviceorientation",
+              handleOrientation,
+              true
+            );
           }
         })
         .catch(console.error);
     } else {
-      window.addEventListener("deviceorientation", handleOrientation);
+      window.addEventListener("deviceorientation", handleOrientation, true);
     }
   };
-
-  // Handle device orientation logic inside useEffect
-  // useEffect(() => {
-  //   // Permission handling for iOS
-  //   const requestPermission = () => {
-  //     if (typeof DeviceOrientationEvent.requestPermission === "function") {
-  //       DeviceOrientationEvent.requestPermission()
-  //         .then((permissionState) => {
-  //           if (permissionState === "granted") {
-  //             window.addEventListener("deviceorientation", handleOrientation);
-  //           }
-  //         })
-  //         .catch(console.error);
-  //     } else {
-  //       window.addEventListener("deviceorientation", handleOrientation);
-  //     }
-  //   };
-
-  //   // Button creation for iOS permission
-  //   const button = document.createElement("button");
-  //   button.innerText = "Enable Motion Control";
-  //   button.style.position = "absolute";
-  //   button.style.zIndex = 1;
-  //   button.onclick = requestPermission;
-  //   document.body.appendChild(button);
-
-  //   // Cleanup
-  //   return () => {
-  //     window.removeEventListener("deviceorientation", handleOrientation);
-  //     document.body.removeChild(button);
-  //   };
-  // }, []);
 
   const handleOrientation = (event) => {
     const { alpha, beta, gamma } = event;
 
     if (cameraRef.current) {
-      // Rotate camera based on device orientation
-      const x = (beta * Math.PI) / 180; // Convert degrees to radians
-      const y = (alpha * Math.PI) / 180;
-      const z = (gamma * Math.PI) / 180;
+      const yRotation = THREE.MathUtils.degToRad(alpha);
+      const xRotation = THREE.MathUtils.degToRad(beta);
+      const zRotation = THREE.MathUtils.degToRad(gamma);
 
-      cameraRef.current.rotation.set(x, y, z);
+      cameraRef.current.rotation.set(xRotation, yRotation, zRotation, "YXZ");
     }
   };
 
+  useEffect(() => {
+    // Cleanup function to remove the event listener
+    return () => {
+      window.removeEventListener("deviceorientation", handleOrientation, true);
+    };
+  }, []);
+
   return (
-    <>
-      <button onClick={requestPermission}>enable controls</button>
+    <div style={{ position: "relative" }}>
+      <button
+        onClick={requestPermission}
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          zIndex: 1,
+          padding: "10px 20px",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        Enable Motion Control
+      </button>
       <Canvas style={{ height: "400px" }}>
         <PerspectiveCamera makeDefault ref={cameraRef} position={[0, 0, 0.1]} />
-        <OrbitControls />
+        <OrbitControls enableZoom={false} />
         <Suspense fallback={null}>
-          <SphereImageTest />
+          <SphereImage imagePath={imageSrc} />
         </Suspense>
       </Canvas>
-    </>
+    </div>
   );
 };
 
