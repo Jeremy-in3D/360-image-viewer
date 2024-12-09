@@ -1,12 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Sky } from "@react-three/drei";
+import { OrbitControls, Sky, PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
 import "./App.css";
 
+// QUERY PARAM EXAMPLE:  `https://yourapp.com?image=item1`
+const imagePath =
+  "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg";
 function App() {
-  const imagePath =
-    "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg"; // replace with your 360 image path
+  const [selectedImage, setSelectedImage] = useState(2);
 
   useEffect(() => {
     const updateHeight = () => {
@@ -14,29 +16,49 @@ function App() {
       doc.style.setProperty("--doc-height", `${window.innerHeight}px`);
     };
 
-    // Update height on resize
     window.addEventListener("resize", updateHeight);
-    // Initial setting of height
     updateHeight();
 
-    // Clean up event listener on component unmount
     return () => window.removeEventListener("resize", updateHeight);
   }, []);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const imageParam = queryParams.get("image");
+
+    if (imageParam) {
+      setSelectedImage(getImageBasedOnParam(imageParam));
+    }
+  }, []);
+
+  const getImageBasedOnParam = (param) => {
+    switch (param) {
+      case "item1":
+        return "path/to/image1.png";
+      case "item2":
+        return "path/to/image2.png";
+      case "item3":
+        return "path/to/image3.png";
+      case "item4":
+        return "path/to/image4.png";
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="app-wrapper">
       <h1 style={{ color: "yellow" }}>360 Image Viewer</h1>
-      <Image360Viewer imageSrc={imagePath} />
-      <Map />
+      {/* <Image360Viewer imageSrc={imagePath} /> */}
+      <MemoizedImage360ViewerTest imageSrc={imagePath} />
+      <Map setSelectedImage={setSelectedImage} selectedImage={selectedImage} />
     </div>
   );
 }
 
 export default App;
 
-const Map = ({}) => {
-  const [selectedImage, setSelectedImage] = useState(2);
-
+const Map = ({ selectedImage, setSelectedImage }) => {
   const images = [0, 1, 2, 3];
   return (
     <div className="map-wrapper">
@@ -50,12 +72,19 @@ const Map = ({}) => {
           className="image-preview"
         ></div>
       ))}
+      <div
+        style={{
+          border: "1px solid white",
+          width: "100%",
+          position: "absolute",
+        }}
+      ></div>
     </div>
   );
 };
 
-const SphereImage = ({ imageSrc }) => {
-  const texture = new THREE.TextureLoader().load(imageSrc);
+const SphereImage = ({}) => {
+  const texture = new THREE.TextureLoader().load(imagePath);
 
   return (
     <mesh>
@@ -66,6 +95,7 @@ const SphereImage = ({ imageSrc }) => {
 };
 
 const Image360Viewer = ({ imageSrc }) => {
+  console.log("big test");
   return (
     <Canvas style={{ height: "500px", width: "100%", borderRadius: "20px" }}>
       <Sky sunPosition={[100, 20, 100]} />
@@ -74,3 +104,81 @@ const Image360Viewer = ({ imageSrc }) => {
     </Canvas>
   );
 };
+
+const Image360ViewerTest = () => {
+  const cameraRef = useRef();
+
+  const requestPermission = () => {
+    if (typeof DeviceOrientationEvent.requestPermission === "function") {
+      DeviceOrientationEvent.requestPermission()
+        .then((permissionState) => {
+          if (permissionState === "granted") {
+            window.addEventListener("deviceorientation", handleOrientation);
+          }
+        })
+        .catch(console.error);
+    } else {
+      window.addEventListener("deviceorientation", handleOrientation);
+    }
+  };
+
+  // Handle device orientation logic inside useEffect
+  // useEffect(() => {
+  //   // Permission handling for iOS
+  //   const requestPermission = () => {
+  //     if (typeof DeviceOrientationEvent.requestPermission === "function") {
+  //       DeviceOrientationEvent.requestPermission()
+  //         .then((permissionState) => {
+  //           if (permissionState === "granted") {
+  //             window.addEventListener("deviceorientation", handleOrientation);
+  //           }
+  //         })
+  //         .catch(console.error);
+  //     } else {
+  //       window.addEventListener("deviceorientation", handleOrientation);
+  //     }
+  //   };
+
+  //   // Button creation for iOS permission
+  //   const button = document.createElement("button");
+  //   button.innerText = "Enable Motion Control";
+  //   button.style.position = "absolute";
+  //   button.style.zIndex = 1;
+  //   button.onclick = requestPermission;
+  //   document.body.appendChild(button);
+
+  //   // Cleanup
+  //   return () => {
+  //     window.removeEventListener("deviceorientation", handleOrientation);
+  //     document.body.removeChild(button);
+  //   };
+  // }, []);
+
+  const handleOrientation = (event) => {
+    const { alpha, beta, gamma } = event;
+
+    if (cameraRef.current) {
+      // Rotate camera based on device orientation
+      const x = (beta * Math.PI) / 180; // Convert degrees to radians
+      const y = (alpha * Math.PI) / 180;
+      const z = (gamma * Math.PI) / 180;
+
+      cameraRef.current.rotation.set(x, y, z);
+    }
+  };
+
+  return (
+    <>
+      <button onClick={requestPermission}>enable controls</button>
+      <Canvas style={{ height: "400px" }}>
+        <PerspectiveCamera makeDefault ref={cameraRef} position={[0, 0, 0.1]} />
+        <OrbitControls />
+        <Suspense fallback={null}>
+          <SphereImage />
+        </Suspense>
+      </Canvas>
+    </>
+  );
+};
+
+const MemoizedImage360ViewerTest = React.memo(Image360ViewerTest);
