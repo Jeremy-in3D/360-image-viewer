@@ -167,7 +167,7 @@ const CameraController = () => {
     const { alpha, beta, gamma } = animData.current;
 
     // Convert degrees to radians
-    const xRotation = THREE.MathUtils.degToRad(beta);
+    const xRotation = THREE.MathUtils.degToRad(beta - 90);
     const yRotation = THREE.MathUtils.degToRad(alpha);
     const zRotation = THREE.MathUtils.degToRad(gamma);
 
@@ -181,7 +181,7 @@ const CameraController = () => {
 const Image360ViewerTest = () => {
   return (
     <div style={{ position: "relative" }}>
-      <Canvas style={{ height: "400px" }}>
+      <Canvas style={{ height: "400px" }} camera={{ x: 225, y: 0, z: 0 }}>
         <OrbitControls />
         <ambientLight />
         <CameraController />
