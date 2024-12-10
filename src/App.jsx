@@ -160,8 +160,8 @@ const CameraController = ({ controlType }) => {
     if (controlType === "device" && animData.current) {
       const { alpha, beta } = animData.current;
       camera.rotation.set(
-        THREE.MathUtils.degToRad(beta),
-        THREE.MathUtils.degToRad(180 - alpha),
+        THREE.MathUtils.degToRad(0),
+        THREE.MathUtils.degToRad(alpha),
         0,
         "YXZ"
       );
