@@ -126,32 +126,50 @@ const CameraController = () => {
   const controlsRef = useRef();
   const animData = useRef({ alpha: 0, beta: 0, gamma: 0 });
 
-  useEffect(() => {
-    const requestPermission = () => {
-      if (typeof DeviceOrientationEvent.requestPermission === "function") {
-        DeviceOrientationEvent.requestPermission()
-          .then((permissionState) => {
-            if (permissionState === "granted") {
-              window.addEventListener(
-                "deviceorientation",
-                handleOrientation,
-                true
-              );
-            }
-          })
-          .catch(console.error);
-      } else {
-        window.addEventListener("deviceorientation", handleOrientation, true);
-      }
-    };
+  // useEffect(() => {
+  //   const requestPermission = () => {
+  //     if (typeof DeviceOrientationEvent.requestPermission === "function") {
+  //       DeviceOrientationEvent.requestPermission()
+  //         .then((permissionState) => {
+  //           if (permissionState === "granted") {
+  //             window.addEventListener(
+  //               "deviceorientation",
+  //               handleOrientation,
+  //               true
+  //             );
+  //           }
+  //         })
+  //         .catch(console.error);
+  //     } else {
+  //       window.addEventListener("deviceorientation", handleOrientation, true);
+  //     }
+  //   };
 
-    // Ensure requests happen on a user gesture if needed
-    requestPermission();
+  //   // Ensure requests happen on a user gesture if needed
+  //   requestPermission();
 
-    return () => {
-      window.removeEventListener("deviceorientation", handleOrientation, true);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("deviceorientation", handleOrientation, true);
+  //   };
+  // }, []);
+
+  // const requestPermission = () => {
+  //   if (typeof DeviceOrientationEvent.requestPermission === "function") {
+  //     DeviceOrientationEvent.requestPermission()
+  //       .then((permissionState) => {
+  //         if (permissionState === "granted") {
+  //           window.addEventListener(
+  //             "deviceorientation",
+  //             handleOrientation,
+  //             true
+  //           );
+  //         }
+  //       })
+  //       .catch(console.error);
+  //   } else {
+  //     window.addEventListener("deviceorientation", handleOrientation, true);
+  //   }
+  // };
 
   const handleOrientation = (event) => {
     animData.current.alpha = event.alpha || 0;
@@ -179,8 +197,42 @@ const CameraController = () => {
 };
 
 const Image360ViewerTest = () => {
+  const requestPermission = () => {
+    if (typeof DeviceOrientationEvent.requestPermission === "function") {
+      DeviceOrientationEvent.requestPermission()
+        .then((permissionState) => {
+          if (permissionState === "granted") {
+            window.addEventListener(
+              "deviceorientation",
+              handleOrientation,
+              true
+            );
+          }
+        })
+        .catch(console.error);
+    } else {
+      window.addEventListener("deviceorientation", handleOrientation, true);
+    }
+  };
   return (
     <div style={{ position: "relative" }}>
+      <button
+        onClick={requestPermission}
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          zIndex: 1,
+          padding: "10px 20px",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        Enable Motion Control
+      </button>
       <Canvas style={{ height: "400px" }} camera={{ x: 225, y: 0, z: 0 }}>
         <OrbitControls />
         <ambientLight />
