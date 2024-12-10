@@ -121,19 +121,19 @@ const Image360Viewer = ({ imageSrc }) => {
   );
 };
 
-const CameraController = ({ enableDeviceOrientation }) => {
+const CameraController = ({ controlType }) => {
   const { camera } = useThree();
   const controlsRef = useRef();
   const animData = useRef({ alpha: 0, beta: 0, gamma: 0 });
 
   useEffect(() => {
-    if (enableDeviceOrientation) {
-      const handleOrientation = (event) => {
-        animData.current.alpha = event.alpha || 0;
-        animData.current.beta = event.beta || 0;
-        animData.current.gamma = event.gamma || 0;
-      };
+    const handleOrientation = (event) => {
+      animData.current.alpha = event.alpha || 0;
+      animData.current.beta = event.beta || 0;
+      animData.current.gamma = event.gamma || 0;
+    };
 
+    if (controlType === "device") {
       if (typeof DeviceOrientationEvent.requestPermission === "function") {
         DeviceOrientationEvent.requestPermission()
           .then((permissionState) => {
@@ -149,45 +149,44 @@ const CameraController = ({ enableDeviceOrientation }) => {
       } else {
         window.addEventListener("deviceorientation", handleOrientation, true);
       }
-
-      return () => {
-        window.removeEventListener(
-          "deviceorientation",
-          handleOrientation,
-          true
-        );
-      };
     }
-  }, [enableDeviceOrientation]);
+
+    return () => {
+      window.removeEventListener("deviceorientation", handleOrientation, true);
+    };
+  }, [controlType]);
 
   useFrame(() => {
-    if (controlsRef.current) {
-      controlsRef.current.update();
+    if (controlType === "device" && animData.current) {
+      const { alpha, beta } = animData.current;
+      camera.rotation.set(
+        THREE.MathUtils.degToRad(beta),
+        THREE.MathUtils.degToRad(180 - alpha),
+        0,
+        "YXZ"
+      );
     }
 
-    const { alpha, beta } = animData.current;
-    const xOffset = 90; // THREE.MathUtils.degToRad(90); // Look down by 90 degrees
-    const xRotation = THREE.MathUtils.degToRad(0); // THREE.MathUtils.degToRad(beta) + xOffset;
-    const yRotation = THREE.MathUtils.degToRad(alpha);
-
-    camera.rotation.set(xRotation, yRotation, 0, "YXZ");
+    if (controlType === "orbit" && controlsRef.current) {
+      controlsRef.current.update();
+    }
   });
 
-  return <OrbitControls ref={controlsRef} enableZoom={false} />;
+  return controlType === "orbit" ? (
+    <OrbitControls ref={controlsRef} enableZoom={false} />
+  ) : null;
 };
+const Image360ViewerTest = () => {
+  const [controlType, setControlType] = useState("orbit");
 
-const Image360ViewerTest = ({ imageSrc }) => {
-  const [isDeviceOrientationEnabled, setDeviceOrientationEnabled] =
-    useState(false);
-
-  const handleClick = () => {
-    setDeviceOrientationEnabled(true);
+  const handleToggle = () => {
+    setControlType((prev) => (prev === "orbit" ? "device" : "orbit"));
   };
 
   return (
     <div style={{ position: "relative" }}>
       <button
-        onClick={handleClick}
+        onClick={handleToggle}
         style={{
           position: "absolute",
           top: "20px",
@@ -201,15 +200,13 @@ const Image360ViewerTest = ({ imageSrc }) => {
           cursor: "pointer",
         }}
       >
-        Enable Motion Control
+        Toggle Control: {controlType}
       </button>
       <Canvas style={{ height: "400px" }}>
         <ambientLight />
-        <CameraController
-          enableDeviceOrientation={isDeviceOrientationEnabled}
-        />
+        <CameraController controlType={controlType} />
         <Suspense fallback={null}>
-          <SphereImageTest imagePath={imageSrc} />
+          <SphereImageTest />
         </Suspense>
       </Canvas>
     </div>
