@@ -121,103 +121,73 @@ const Image360Viewer = ({ imageSrc }) => {
   );
 };
 
-const CameraController = () => {
-  const camera = useThree((state) => state.camera);
+const CameraController = ({ enableDeviceOrientation }) => {
+  const { camera } = useThree();
   const controlsRef = useRef();
   const animData = useRef({ alpha: 0, beta: 0, gamma: 0 });
 
-  // useEffect(() => {
-  //   const requestPermission = () => {
-  //     if (typeof DeviceOrientationEvent.requestPermission === "function") {
-  //       DeviceOrientationEvent.requestPermission()
-  //         .then((permissionState) => {
-  //           if (permissionState === "granted") {
-  //             window.addEventListener(
-  //               "deviceorientation",
-  //               handleOrientation,
-  //               true
-  //             );
-  //           }
-  //         })
-  //         .catch(console.error);
-  //     } else {
-  //       window.addEventListener("deviceorientation", handleOrientation, true);
-  //     }
-  //   };
+  useEffect(() => {
+    if (enableDeviceOrientation) {
+      const handleOrientation = (event) => {
+        animData.current.alpha = event.alpha || 0;
+        animData.current.beta = event.beta || 0;
+        animData.current.gamma = event.gamma || 0;
+      };
 
-  //   // Ensure requests happen on a user gesture if needed
-  //   requestPermission();
+      if (typeof DeviceOrientationEvent.requestPermission === "function") {
+        DeviceOrientationEvent.requestPermission()
+          .then((permissionState) => {
+            if (permissionState === "granted") {
+              window.addEventListener(
+                "deviceorientation",
+                handleOrientation,
+                true
+              );
+            }
+          })
+          .catch(console.error);
+      } else {
+        window.addEventListener("deviceorientation", handleOrientation, true);
+      }
 
-  //   return () => {
-  //     window.removeEventListener("deviceorientation", handleOrientation, true);
-  //   };
-  // }, []);
-
-  // const requestPermission = () => {
-  //   if (typeof DeviceOrientationEvent.requestPermission === "function") {
-  //     DeviceOrientationEvent.requestPermission()
-  //       .then((permissionState) => {
-  //         if (permissionState === "granted") {
-  //           window.addEventListener(
-  //             "deviceorientation",
-  //             handleOrientation,
-  //             true
-  //           );
-  //         }
-  //       })
-  //       .catch(console.error);
-  //   } else {
-  //     window.addEventListener("deviceorientation", handleOrientation, true);
-  //   }
-  // };
-
-  const handleOrientation = (event) => {
-    animData.current.alpha = event.alpha || 0;
-    animData.current.beta = event.beta || 0;
-    animData.current.gamma = event.gamma || 0;
-  };
+      return () => {
+        window.removeEventListener(
+          "deviceorientation",
+          handleOrientation,
+          true
+        );
+      };
+    }
+  }, [enableDeviceOrientation]);
 
   useFrame(() => {
     if (controlsRef.current) {
       controlsRef.current.update();
     }
 
-    const { alpha, beta, gamma } = animData.current;
-
-    // Convert degrees to radians
-    const xRotation = 0; // THREE.MathUtils.degToRad(-90); // THREE.MathUtils.degToRad(beta - 90);
+    const { alpha, beta } = animData.current;
+    const xOffset = 0; // THREE.MathUtils.degToRad(90); // Look down by 90 degrees
+    const xRotation = THREE.MathUtils.degToRad(beta) + xOffset;
     const yRotation = THREE.MathUtils.degToRad(alpha);
-    const zRotation = 0; // THREE.MathUtils.degToRad(gamma);
 
-    // Mix camera's interaction path with device orientation
-    camera.rotation.set(xRotation, yRotation, zRotation, "YXZ");
+    camera.rotation.set(xRotation, yRotation, 0, "YXZ");
   });
 
   return <OrbitControls ref={controlsRef} enableZoom={false} />;
 };
 
-const Image360ViewerTest = () => {
-  const requestPermission = () => {
-    if (typeof DeviceOrientationEvent.requestPermission === "function") {
-      DeviceOrientationEvent.requestPermission()
-        .then((permissionState) => {
-          if (permissionState === "granted") {
-            window.addEventListener(
-              "deviceorientation",
-              handleOrientation,
-              true
-            );
-          }
-        })
-        .catch(console.error);
-    } else {
-      window.addEventListener("deviceorientation", handleOrientation, true);
-    }
+const Image360ViewerTest = ({ imageSrc }) => {
+  const [isDeviceOrientationEnabled, setDeviceOrientationEnabled] =
+    useState(false);
+
+  const handleClick = () => {
+    setDeviceOrientationEnabled(true);
   };
+
   return (
     <div style={{ position: "relative" }}>
       <button
-        onClick={requestPermission}
+        onClick={handleClick}
         style={{
           position: "absolute",
           top: "20px",
@@ -233,12 +203,13 @@ const Image360ViewerTest = () => {
       >
         Enable Motion Control
       </button>
-      <Canvas style={{ height: "400px" }} camera={{ x: 225, y: 0, z: 0 }}>
-        <OrbitControls />
+      <Canvas style={{ height: "400px" }}>
         <ambientLight />
-        <CameraController />
+        <CameraController
+          enableDeviceOrientation={isDeviceOrientationEnabled}
+        />
         <Suspense fallback={null}>
-          <SphereImageTest />
+          <SphereImageTest imagePath={imageSrc} />
         </Suspense>
       </Canvas>
     </div>
