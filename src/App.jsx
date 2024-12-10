@@ -176,7 +176,7 @@ const Image360Viewer = ({ imageSrc }) => {
 //   return <OrbitControls ref={controlsRef} enableZoom={false} />;
 // };
 
-const CameraController = ({ controlType }) => {
+const CameraController = ({ controlType, setTexter }) => {
   const { camera } = useThree();
   const controlsRef = useRef();
   const animData = useRef({ alpha: 0, beta: 0, gamma: 0 });
@@ -193,6 +193,7 @@ const CameraController = ({ controlType }) => {
         DeviceOrientationEvent.requestPermission()
           .then((permissionState) => {
             if (permissionState === "granted") {
+              setTexter("constrol-device-granted");
               window.addEventListener(
                 "deviceorientation",
                 handleOrientation,
@@ -202,6 +203,7 @@ const CameraController = ({ controlType }) => {
           })
           .catch(console.error);
       } else {
+        setTexter("constrol-wasnt-granted");
         window.addEventListener("deviceorientation", handleOrientation, true);
       }
     }
@@ -272,7 +274,8 @@ const CameraController = ({ controlType }) => {
 //   );
 // };
 
-const Image360ViewerTest = ({ imageSrc }) => {
+const Image360ViewerTest = () => {
+  const [texter, setTexter] = useState("");
   const [controlType, setControlType] = useState("orbit");
 
   const handleToggle = () => {
@@ -281,6 +284,16 @@ const Image360ViewerTest = ({ imageSrc }) => {
 
   return (
     <div style={{ position: "relative" }}>
+      <div
+        style={{
+          border: "1px solid red",
+          position: "absolute",
+          top: 0,
+          right: 0,
+          zIndex: 5,
+          width: "15em",
+        }}
+      >{`yes: ${texter}`}</div>
       <button
         onClick={handleToggle}
         style={{
@@ -300,9 +313,9 @@ const Image360ViewerTest = ({ imageSrc }) => {
       </button>
       <Canvas style={{ height: "400px" }}>
         <ambientLight />
-        <CameraController controlType={controlType} />
+        <CameraController controlType={controlType} setTexter={setTexter} />
         <Suspense fallback={null}>
-          <SphereImageTest imagePath={imageSrc} />
+          <SphereImageTest />
         </Suspense>
       </Canvas>
     </div>
