@@ -166,7 +166,7 @@ const CameraController = ({ enableDeviceOrientation }) => {
     }
 
     const { alpha, beta } = animData.current;
-    const xOffset = 0; // THREE.MathUtils.degToRad(90); // Look down by 90 degrees
+    const xOffset = THREE.MathUtils.degToRad(90); // Look down by 90 degrees
     const xRotation = THREE.MathUtils.degToRad(beta) + xOffset;
     const yRotation = THREE.MathUtils.degToRad(alpha);
 
