@@ -121,48 +121,37 @@ const Image360Viewer = ({ imageSrc }) => {
   );
 };
 
-const CameraController = ({ controlType }) => {
+const CameraController = ({ controlType, permissionsGranted }) => {
   const { camera } = useThree();
   const controlsRef = useRef();
   const animData = useRef({ alpha: 0, beta: 0, gamma: 0 });
 
-  const handleOrientationPermission = () => {
-    if (
-      typeof DeviceOrientationEvent !== "undefined" &&
-      typeof DeviceOrientationEvent.requestPermission === "function"
-    ) {
-      DeviceOrientationEvent.requestPermission()
-        .then((permissionState) => {
-          if (permissionState === "granted") {
-            window.addEventListener(
-              "deviceorientation",
-              handleOrientation,
-              true
-            );
-          }
-        })
-        .catch(console.error);
-    } else {
-      // No permissions needed, proceed directly
-      window.addEventListener("deviceorientation", handleOrientation, true);
-    }
+  const handleOrientation = (event) => {
+    animData.current.alpha = event.alpha || 0;
+    animData.current.beta = event.beta || 0;
+    animData.current.gamma = event.gamma || 0;
+
+    // Debugging orientation data
+    console.log(
+      `Alpha: ${animData.current.alpha}, Beta: ${animData.current.beta}, Gamma: ${animData.current.gamma}`
+    );
   };
 
   useEffect(() => {
-    if (controlType === "device") {
-      handleOrientationPermission();
+    if (controlType === "device" && permissionsGranted) {
+      window.addEventListener("deviceorientation", handleOrientation, true);
     }
 
     return () => {
       window.removeEventListener("deviceorientation", handleOrientation, true);
     };
-  }, [controlType]);
+  }, [controlType, permissionsGranted]);
 
   useFrame(() => {
     if (controlType === "device" && animData.current) {
       const { alpha, beta } = animData.current;
       camera.rotation.set(
-        THREE.MathUtils.degToRad(0),
+        THREE.MathUtils.degToRad(beta), // Adjust based on actual use case
         THREE.MathUtils.degToRad(alpha),
         0,
         "YXZ"
@@ -178,11 +167,31 @@ const CameraController = ({ controlType }) => {
     <OrbitControls ref={controlsRef} enableZoom={false} />
   ) : null;
 };
+
 const Image360ViewerTest = () => {
   const [controlType, setControlType] = useState("orbit");
+  const [permissionsGranted, setPermissionsGranted] = useState(false);
+
+  const handleOrientationPermission = () => {
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
+      DeviceOrientationEvent.requestPermission()
+        .then((permissionState) => {
+          if (permissionState === "granted") {
+            setPermissionsGranted(true);
+          }
+        })
+        .catch(console.error);
+    } else {
+      // Assume permissions are granted for browsers without the request system
+      setPermissionsGranted(true);
+    }
+  };
 
   const handleToggle = () => {
-    if (controlType === "orbit") {
+    if (controlType === "orbit" && !permissionsGranted) {
       // Request permission before switching
       handleOrientationPermission();
     }
@@ -210,7 +219,10 @@ const Image360ViewerTest = () => {
       </button>
       <Canvas style={{ height: "400px" }}>
         <ambientLight />
-        <CameraController controlType={controlType} />
+        <CameraController
+          controlType={controlType}
+          permissionsGranted={permissionsGranted}
+        />
         <Suspense fallback={null}>
           <SphereImageTest />
         </Suspense>
