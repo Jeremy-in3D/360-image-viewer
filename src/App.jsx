@@ -126,29 +126,31 @@ const CameraController = ({ controlType }) => {
   const controlsRef = useRef();
   const animData = useRef({ alpha: 0, beta: 0, gamma: 0 });
 
-  useEffect(() => {
-    const handleOrientation = (event) => {
-      animData.current.alpha = event.alpha || 0;
-      animData.current.beta = event.beta || 0;
-      animData.current.gamma = event.gamma || 0;
-    };
+  const handleOrientationPermission = () => {
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
+      DeviceOrientationEvent.requestPermission()
+        .then((permissionState) => {
+          if (permissionState === "granted") {
+            window.addEventListener(
+              "deviceorientation",
+              handleOrientation,
+              true
+            );
+          }
+        })
+        .catch(console.error);
+    } else {
+      // No permissions needed, proceed directly
+      window.addEventListener("deviceorientation", handleOrientation, true);
+    }
+  };
 
+  useEffect(() => {
     if (controlType === "device") {
-      if (typeof DeviceOrientationEvent.requestPermission === "function") {
-        DeviceOrientationEvent.requestPermission()
-          .then((permissionState) => {
-            if (permissionState === "granted") {
-              window.addEventListener(
-                "deviceorientation",
-                handleOrientation,
-                true
-              );
-            }
-          })
-          .catch(console.error);
-      } else {
-        window.addEventListener("deviceorientation", handleOrientation, true);
-      }
+      handleOrientationPermission();
     }
 
     return () => {
@@ -180,6 +182,10 @@ const Image360ViewerTest = () => {
   const [controlType, setControlType] = useState("orbit");
 
   const handleToggle = () => {
+    if (controlType === "orbit") {
+      // Request permission before switching
+      handleOrientationPermission();
+    }
     setControlType((prev) => (prev === "orbit" ? "device" : "orbit"));
   };
 
