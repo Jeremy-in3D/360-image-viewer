@@ -43,8 +43,8 @@ body {
 }
 
 .image-preview {
-  height: 75px;
-  width: 75px;
+  height: 55px;
+  width: 55px;
   background-color: red;
   background-image: url("/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg");
   border-radius: 50%;
