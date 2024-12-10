@@ -176,7 +176,7 @@ const Image360Viewer = ({ imageSrc }) => {
 //   return <OrbitControls ref={controlsRef} enableZoom={false} />;
 // };
 
-const CameraController = ({ controlType, setTexter }) => {
+const CameraController = ({ controlType }) => {
   const { camera } = useThree();
   const controlsRef = useRef();
   const animData = useRef({ alpha: 0, beta: 0, gamma: 0 });
@@ -193,7 +193,6 @@ const CameraController = ({ controlType, setTexter }) => {
         DeviceOrientationEvent.requestPermission()
           .then((permissionState) => {
             if (permissionState === "granted") {
-              setTexter("constrol-device-granted");
               window.addEventListener(
                 "deviceorientation",
                 handleOrientation,
@@ -203,7 +202,6 @@ const CameraController = ({ controlType, setTexter }) => {
           })
           .catch(console.error);
       } else {
-        setTexter("constrol-wasnt-granted");
         window.addEventListener("deviceorientation", handleOrientation, true);
       }
     }
@@ -214,10 +212,10 @@ const CameraController = ({ controlType, setTexter }) => {
   }, [controlType]);
 
   useFrame(() => {
-    if (controlType === "device") {
+    if (controlType === "device" && animData.current) {
       const { alpha, beta } = animData.current;
       camera.rotation.set(
-        THREE.MathUtils.degToRad(0), //  THREE.MathUtils.degToRad(beta),
+        THREE.MathUtils.degToRad(beta),
         THREE.MathUtils.degToRad(180 - alpha),
         0,
         "YXZ"
@@ -274,8 +272,7 @@ const CameraController = ({ controlType, setTexter }) => {
 //   );
 // };
 
-const Image360ViewerTest = () => {
-  const [texter, setTexter] = useState("");
+const Image360ViewerTest = ({ imageSrc }) => {
   const [controlType, setControlType] = useState("orbit");
 
   const handleToggle = () => {
@@ -284,16 +281,6 @@ const Image360ViewerTest = () => {
 
   return (
     <div style={{ position: "relative" }}>
-      <div
-        style={{
-          border: "1px solid red",
-          position: "absolute",
-          top: 0,
-          right: 0,
-          zIndex: 5,
-          width: "15em",
-        }}
-      >{`yes: ${texter}`}</div>
       <button
         onClick={handleToggle}
         style={{
@@ -313,9 +300,9 @@ const Image360ViewerTest = () => {
       </button>
       <Canvas style={{ height: "400px" }}>
         <ambientLight />
-        <CameraController controlType={controlType} setTexter={setTexter} />
+        <CameraController controlType={controlType} />
         <Suspense fallback={null}>
-          <SphereImageTest />
+          <SphereImageTest imagePath={imageSrc} />
         </Suspense>
       </Canvas>
     </div>
