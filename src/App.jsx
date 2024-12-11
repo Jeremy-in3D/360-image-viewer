@@ -34,7 +34,7 @@ function App() {
 
     if (imageParam) {
       console.log({ imageParam });
-      setSelectedImage(getImageBasedOnParam(imageParam));
+      // setSelectedImage(getImageBasedOnParam(imageParam));
     }
   }, []);
 

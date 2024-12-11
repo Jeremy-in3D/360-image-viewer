@@ -9,7 +9,7 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
   const images = [0, 1, 2, 3];
   return (
     <div className="map-wrapper">
-      {imagePaths.map((image, idx) => (
+      {images.map((image, idx) => (
         <div
           key={`key-${idx}`}
           onClick={() =>
@@ -17,7 +17,7 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
           }
           style={{
             border: selectedImage == image ? "3px solid yellow" : "",
-            backgroundImage: `url(${image})`,
+            backgroundImage: `url(${imagePaths[idx]})`,
           }}
           className="image-preview"
         ></div>

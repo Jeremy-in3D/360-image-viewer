@@ -39,7 +39,9 @@ function imageViewer({ imagePath }) {
     }
     setControlType((prev) => (prev === "orbit" ? "device" : "orbit"));
   };
+
   console.log("eh");
+
   return (
     <div
       style={{ position: "relative", border: "1px solid red", height: "50%" }}
@@ -81,7 +83,7 @@ export default MemoizedImageViewer;
 
 const SphereImage = ({ imagePath }) => {
   console.log({ imagePath });
-  const texture = useTexture(imagePath);
+  const texture = useTexture(imagePaths[imagePath]);
 
   return (
     <mesh>
@@ -102,9 +104,9 @@ const CameraController = ({ controlType, permissionsGranted }) => {
     animData.current.gamma = event.gamma || 0;
 
     // Debugging orientation data
-    console.log(
-      `Alpha: ${animData.current.alpha}, Beta: ${animData.current.beta}, Gamma: ${animData.current.gamma}`
-    );
+    // console.log(
+    //   `Alpha: ${animData.current.alpha}, Beta: ${animData.current.beta}, Gamma: ${animData.current.gamma}`
+    // );
   };
 
   useEffect(() => {
