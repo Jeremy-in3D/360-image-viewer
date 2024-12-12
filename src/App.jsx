@@ -34,22 +34,34 @@ function App() {
 
     if (imageParam) {
       console.log({ imageParam });
-      // setSelectedImage(getImageBasedOnParam(imageParam));
+      setSelectedImage(getImageBasedOnParam(imageParam));
     }
   }, []);
 
   const getImageBasedOnParam = (param) => {
+    // switch (param) {
+    //   case "item1":
+    //     return "/images/48.png";
+    //   case "item2":
+    //     return "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg";
+    //   case "item3":
+    //     return "/images/49.png";
+    //   case "item4":
+    //     return "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg";
+    //   default:
+    //     return "/images/48.png";
+    // }
     switch (param) {
       case "item1":
-        return "/images/48.png";
+        return 0;
       case "item2":
-        return "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg";
+        return 1;
       case "item3":
-        return "/images/49.png";
+        return 2;
       case "item4":
-        return "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg";
+        return 3;
       default:
-        return "/images/48.png";
+        return 0;
     }
   };
 
