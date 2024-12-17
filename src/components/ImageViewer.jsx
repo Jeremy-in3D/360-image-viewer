@@ -219,7 +219,8 @@ const VidViewer = ({ videoPath }) => {
         loop
         muted
         playsInline
-        autoPlay
+        controls
+        // autoPlay
       />
       {!videoTexture && (
         <button
