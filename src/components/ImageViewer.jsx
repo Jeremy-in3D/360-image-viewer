@@ -214,7 +214,9 @@ const VidViewer = ({ videoPath }) => {
         playsInline
         autoPlay
       />
-      <Canvas>
+      <Canvas
+        style={{ width: "90%", height: "80%", border: "1px solid yellow" }}
+      >
         {videoTexture && <VideoSphere videoTexture={videoTexture} />}
         <ambientLight intensity={0.5} />
         <OrbitControls enableZoom={false} />
