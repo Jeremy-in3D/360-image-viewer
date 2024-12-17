@@ -207,7 +207,7 @@ const VidViewer = ({ videoPath }) => {
       <video
         ref={videoRef}
         src={videoPath}
-        // style={{ display: "none" }}
+        style={{ display: "none" }}
         // crossOrigin="anonymous"
         loop
         // muted
