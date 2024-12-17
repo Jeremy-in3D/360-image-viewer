@@ -179,9 +179,6 @@ const VidViewer = ({ videoPath }) => {
     const handleLoadedData = () => {
       console.info("Video metadata loaded");
       const texture = new THREE.VideoTexture(videoElement);
-      // texture.minFilter = THREE.LinearFilter;
-      // texture.magFilter = THREE.LinearFilter;
-      // texture.format = THREE.RGBFormat;
       setVideoTexture(texture);
     };
 
@@ -189,18 +186,28 @@ const VidViewer = ({ videoPath }) => {
       console.error("Video error:", err);
     };
 
-    videoElement.addEventListener("loadeddata", handleLoadedData);
-    videoElement.addEventListener("error", handleError);
+    if (videoElement) {
+      videoElement.addEventListener("loadeddata", handleLoadedData);
+      videoElement.addEventListener("error", handleError);
+    }
 
     videoElement.play().catch((err) => {
       console.error("Autoplay prevented:", err);
     });
 
     return () => {
-      videoElement.removeEventListener("loadeddata", handleLoadedData);
-      videoElement.removeEventListener("error", handleError);
+      if (videoElement) {
+        videoElement.removeEventListener("loadeddata", handleLoadedData);
+        videoElement.removeEventListener("error", handleError);
+      }
     };
   }, [videoPath]);
+
+  const handlePlayButton = () => {
+    videoRef.current.play().catch((err) => {
+      console.error("Manual play prevented:", err);
+    });
+  };
 
   return (
     <>
@@ -214,8 +221,22 @@ const VidViewer = ({ videoPath }) => {
         playsInline
         autoPlay
       />
+      {!videoTexture && (
+        <button
+          onClick={handlePlayButton}
+          style={{
+            zIndex: 1,
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          Play Video
+        </button>
+      )}
       <Canvas
-        style={{ width: "90%", height: "80%", border: "1px solid orange" }}
+        style={{ width: "90%", height: "80%", border: "1px solid green" }}
       >
         {videoTexture && <VideoSphere videoTexture={videoTexture} />}
         <ambientLight intensity={0.5} />
