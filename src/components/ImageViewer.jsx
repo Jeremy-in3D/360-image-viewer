@@ -177,29 +177,28 @@ const VidViewer = ({ videoPath }) => {
     const videoElement = videoRef.current;
 
     const handleLoadedData = () => {
-      console.info("Video metadata loaded sup");
+      console.info("Video metadata loaded");
       const texture = new THREE.VideoTexture(videoElement);
       // texture.minFilter = THREE.LinearFilter;
       // texture.magFilter = THREE.LinearFilter;
+      // texture.format = THREE.RGBFormat;
       setVideoTexture(texture);
     };
 
-    const playVideoOnUserAction = () => {
-      videoElement.play().catch((err) => {
-        console.error("Play video on user action failed:", err);
-      });
+    const handleError = (err) => {
+      console.error("Video error:", err);
     };
 
     videoElement.addEventListener("loadeddata", handleLoadedData);
     videoElement.addEventListener("error", handleError);
 
-    // Attempt to play the video after a user interaction event
-    document.addEventListener("click", playVideoOnUserAction, { once: true });
+    videoElement.play().catch((err) => {
+      console.error("Autoplay prevented:", err);
+    });
 
     return () => {
       videoElement.removeEventListener("loadeddata", handleLoadedData);
       videoElement.removeEventListener("error", handleError);
-      document.removeEventListener("click", playVideoOnUserAction);
     };
   }, [videoPath]);
 
@@ -208,10 +207,10 @@ const VidViewer = ({ videoPath }) => {
       <video
         ref={videoRef}
         src={videoPath}
-        // style={{ display: "none" }}
-        // crossOrigin="anonymous"
+        style={{ display: "none" }}
+        crossOrigin="anonymous"
         loop
-        // muted
+        muted
         playsInline
         autoPlay
       />
