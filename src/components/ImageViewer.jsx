@@ -164,49 +164,62 @@ const imagePaths = [
 // };
 
 const VideoSphere = ({ videoTexture }) => (
-  <Sphere args={[500, 60, 40]} scale={[1, 1, -1]}>
-    <meshBasicMaterial
-      attach="material"
-      map={videoTexture}
-      side={THREE.BackSide}
-    />
+  <Sphere args={[500, 60, 40]} scale={[-1, 1, 1]}>
+    <meshBasicMaterial map={videoTexture} side={THREE.BackSide} />
   </Sphere>
 );
 
 const VidViewer = ({ videoPath }) => {
-  const videoRef = useRef();
-  const [videoTexture, setVideoTexture] = useState();
+  const videoRef = useRef(null);
+  const [videoTexture, setVideoTexture] = useState(null);
 
   useEffect(() => {
-    const video = document.createElement("video");
-    video.src = videoPath;
-    video.crossOrigin = "anonymous";
-    video.loop = true;
-    video.muted = true;
-    video.playsInline = true;
-    video.autoplay = true;
+    const videoElement = videoRef.current;
 
-    const onVideoPlay = () => {
-      const texture = new THREE.VideoTexture(video);
+    const handleLoadedData = () => {
+      console.info("Video metadata loaded");
+      const texture = new THREE.VideoTexture(videoElement);
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      // texture.format = THREE.RGBFormat;
       setVideoTexture(texture);
     };
 
-    video.addEventListener("canplay", onVideoPlay);
+    const handleError = (err) => {
+      console.error("Video error:", err);
+    };
 
-    videoRef.current = video;
-    video.play();
+    videoElement.addEventListener("loadeddata", handleLoadedData);
+    videoElement.addEventListener("error", handleError);
+
+    videoElement.play().catch((err) => {
+      console.error("Autoplay prevented:", err);
+    });
 
     return () => {
-      video.removeEventListener("canplay", onVideoPlay);
+      videoElement.removeEventListener("loadeddata", handleLoadedData);
+      videoElement.removeEventListener("error", handleError);
     };
   }, [videoPath]);
 
   return (
-    <Canvas style={{ width: "100%", height: "90%" }}>
-      {videoTexture && <VideoSphere videoTexture={videoTexture} />}
-      <ambientLight intensity={0.5} />
-      <OrbitControls enableZoom={false} />
-    </Canvas>
+    <>
+      <video
+        ref={videoRef}
+        src={videoPath}
+        style={{ display: "none" }}
+        crossOrigin="anonymous"
+        loop
+        muted
+        playsInline
+        autoPlay
+      />
+      <Canvas>
+        {videoTexture && <VideoSphere videoTexture={videoTexture} />}
+        <ambientLight intensity={0.5} />
+        <OrbitControls enableZoom={false} />
+      </Canvas>
+    </>
   );
 };
 
