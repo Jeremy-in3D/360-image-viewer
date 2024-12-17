@@ -69,9 +69,12 @@ function App() {
     <div className="app-wrapper">
       <h2 style={{ color: "yellow" }}>360 Image Viewer</h2>
       <Suspense fallback={<FallBackViewer />}>
-        <LazyImageViewer imagePath={selectedImage} />
+        <LazyImageViewer
+          imagePath={selectedImage}
+          videoPath={"/images/360Video_part01_int.mp4"}
+        />
       </Suspense>
-      <Map setSelectedImage={setSelectedImage} selectedImage={selectedImage} />
+      {/* <Map setSelectedImage={setSelectedImage} selectedImage={selectedImage} /> */}
     </div>
   );
 }
