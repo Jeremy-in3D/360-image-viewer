@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState, Suspense, lazy } from "react";
 import "./App.css";
-import { Map } from "./components/MapSelection";
+// import { Map } from "./components/MapSelection";
+import VidViewer from "./components/ImageViewer";
 
-const LazyImageViewer = lazy(() => import("./components/ImageViewer"));
+// const LazyImageViewer = lazy(() => import("./components/ImageViewer"));
 
 //query image-1 qr url: https://360-image-viewer-beige.vercel.app?image=item1
 
@@ -69,10 +70,11 @@ function App() {
     <div className="app-wrapper">
       <h2 style={{ color: "yellow" }}>360 Image Viewer</h2>
       <Suspense fallback={<FallBackViewer />}>
-        <LazyImageViewer
+        <VidViewer videoPath={"/images/360Video_part01_int.mp4"} />
+        {/* <LazyImageViewer
           imagePath={selectedImage}
           videoPath={"/images/360Video_part01_int.mp4"}
-        />
+        /> */}
       </Suspense>
       {/* <Map setSelectedImage={setSelectedImage} selectedImage={selectedImage} /> */}
     </div>
