@@ -68,7 +68,7 @@ function App() {
 
   return (
     <div className="app-wrapper">
-      <h2 style={{ color: "yellow" }}>360 Image Viewer</h2>
+      <h2 style={{ color: "rgb(255,255,255,0.6)" }}>360 Viewer</h2>
       <Suspense fallback={<FallBackViewer />}>
         <VidViewer videoSrc={"/test.mp4"} />
 

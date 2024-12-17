@@ -183,7 +183,7 @@ const VideoSphere = ({ videoSrc }) => {
 
 const VidViewer = ({ videoSrc }) => {
   return (
-    <Canvas style={{ border: "1px solid cyan", width: "80%", height: "80%" }}>
+    <Canvas style={{ border: "1px solid black", width: "100%", height: "80%" }}>
       <ambientLight intensity={0.5} />
       <VideoSphere videoSrc={videoSrc} />
       <OrbitControls enableZoom={false} />
