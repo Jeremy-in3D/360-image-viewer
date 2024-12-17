@@ -215,7 +215,7 @@ const VidViewer = ({ videoPath }) => {
         autoPlay
       />
       <Canvas
-        style={{ width: "90%", height: "80%", border: "1px solid yellow" }}
+        style={{ width: "90%", height: "80%", border: "1px solid orange" }}
       >
         {videoTexture && <VideoSphere videoTexture={videoTexture} />}
         <ambientLight intensity={0.5} />
