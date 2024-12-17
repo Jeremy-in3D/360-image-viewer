@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState, Suspense } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, useTexture, Sphere } from "@react-three/drei";
+import {
+  OrbitControls,
+  useTexture,
+  Sphere,
+  useVideoTexture,
+} from "@react-three/drei";
 import * as THREE from "three";
 
 const imagePaths = [
@@ -163,87 +168,26 @@ const imagePaths = [
 //   );
 // };
 
-const VideoSphere = ({ videoTexture }) => (
-  <Sphere args={[500, 60, 40]} scale={[-1, 1, 1]}>
-    <meshBasicMaterial map={videoTexture} side={THREE.BackSide} />
-  </Sphere>
-);
-
-const VidViewer = ({ videoPath }) => {
-  const videoRef = useRef(null);
-  const [videoTexture, setVideoTexture] = useState(null);
-
-  useEffect(() => {
-    const videoElement = videoRef.current;
-
-    const handleLoadedData = () => {
-      console.info("Video metadata loaded");
-      const texture = new THREE.VideoTexture(videoElement);
-      setVideoTexture(texture);
-    };
-
-    const handleError = (err) => {
-      console.error("Video error:", err);
-    };
-
-    if (videoElement) {
-      videoElement.addEventListener("loadeddata", handleLoadedData);
-      videoElement.addEventListener("error", handleError);
-    }
-
-    videoElement.play().catch((err) => {
-      console.error("Autoplay prevented:", err);
-    });
-
-    return () => {
-      if (videoElement) {
-        videoElement.removeEventListener("loadeddata", handleLoadedData);
-        videoElement.removeEventListener("error", handleError);
-      }
-    };
-  }, [videoPath]);
-
-  const handlePlayButton = () => {
-    videoRef.current.play().catch((err) => {
-      console.error("Manual play prevented:", err);
-    });
-  };
+const VideoSphere = ({ videoSrc }) => {
+  console.log({ videoSrc });
+  const videoTexture = useVideoTexture(videoSrc);
+  const sphereRef = useRef();
 
   return (
-    <>
-      <video
-        ref={videoRef}
-        src={videoPath}
-        style={{ display: "none" }}
-        crossOrigin="anonymous"
-        loop
-        muted
-        playsInline
-        controls
-        // autoPlay
-      />
-      {!videoTexture && (
-        <button
-          onClick={handlePlayButton}
-          style={{
-            zIndex: 1,
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          Play Video
-        </button>
-      )}
-      <Canvas
-        style={{ width: "90%", height: "80%", border: "1px solid green" }}
-      >
-        {videoTexture && <VideoSphere videoTexture={videoTexture} />}
-        <ambientLight intensity={0.5} />
-        <OrbitControls enableZoom={false} />
-      </Canvas>
-    </>
+    <mesh ref={sphereRef}>
+      <sphereGeometry args={[500, 60, 40]} />
+      <meshBasicMaterial map={videoTexture} side={THREE.BackSide} />
+    </mesh>
+  );
+};
+
+const VidViewer = ({ videoSrc }) => {
+  return (
+    <Canvas style={{ border: "1px solid cyan", width: "80%", height: "80%" }}>
+      <ambientLight intensity={0.5} />
+      <VideoSphere videoSrc={videoSrc} />
+      <OrbitControls enableZoom={false} />
+    </Canvas>
   );
 };
 

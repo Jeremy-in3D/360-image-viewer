@@ -70,7 +70,8 @@ function App() {
     <div className="app-wrapper">
       <h2 style={{ color: "yellow" }}>360 Image Viewer</h2>
       <Suspense fallback={<FallBackViewer />}>
-        <VidViewer videoPath={"/test.mp4"} />
+        <VidViewer videoSrc={"/test.mp4"} />
+
         {/* <LazyImageViewer
           imagePath={selectedImage}
           videoPath={"/images/360Video_part01_int.mp4"}
