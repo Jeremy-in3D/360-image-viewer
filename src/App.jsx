@@ -70,7 +70,11 @@ function App() {
     <div className="app-wrapper">
       <h2 style={{ color: "rgb(255,255,255,0.6)" }}>360 Viewer</h2>
       <Suspense fallback={<FallBackViewer />}>
-        <VidViewer videoSrc={"/test.mp4"} />
+        <VidViewer
+          videoSrc={
+            "https://in3dwebsite.blob.core.windows.net/video/360Video_New_Compressed.mp4"
+          }
+        />
 
         {/* <LazyImageViewer
           imagePath={selectedImage}
