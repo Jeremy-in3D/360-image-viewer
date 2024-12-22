@@ -72,8 +72,8 @@ function App() {
       <Suspense fallback={<FallBackViewer />}>
         <VidViewer
           videoSrc={
-            "/test.mp4"
-            // "https://in3dwebsite.blob.core.windows.net/video/360Video_New_Compressed (1).mp4"
+            // "/test.mp4"
+            "https://in3dwebsite.blob.core.windows.net/video/360Video_New_Compressed.mp4"
           }
         />
 
