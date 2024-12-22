@@ -72,7 +72,7 @@ function App() {
       <Suspense fallback={<FallBackViewer />}>
         <VidViewer
           videoSrc={
-            "https://in3dwebsite.blob.core.windows.net/video/360Video_New_Compressed.mp4"
+            "https://in3dwebsite.blob.core.windows.net/video/360Video_New_Compressed (1).mp4"
           }
         />
 
@@ -89,7 +89,9 @@ function App() {
 export default App;
 
 const FallBackViewer = () => (
-  <div style={{ position: "relative", border: "1px solid red", height: "50%" }}>
+  <div
+    style={{ position: "relative", border: "1px solid yellow", height: "50%" }}
+  >
     Loading...
   </div>
 );
