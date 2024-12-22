@@ -15,6 +15,31 @@ const imagePaths = [
   "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg",
 ];
 
+const VideoSphere = ({ videoSrc }) => {
+  console.log({ videoSrc });
+  const videoTexture = useVideoTexture(videoSrc);
+  const sphereRef = useRef();
+
+  return (
+    <mesh ref={sphereRef} scale={[-1, 1, 1]}>
+      <sphereGeometry args={[500, 60, 40]} />
+      <meshBasicMaterial map={videoTexture} side={THREE.BackSide} />
+    </mesh>
+  );
+};
+
+const VidViewer = ({ videoSrc }) => {
+  return (
+    <Canvas style={{ border: "1px solid black", width: "100%", height: "80%" }}>
+      <ambientLight intensity={0.5} />
+      <VideoSphere videoSrc={videoSrc} />
+      <OrbitControls enableZoom={false} />
+    </Canvas>
+  );
+};
+
+export default VidViewer;
+
 // function imageViewer({ imagePath }) {
 //   const [controlType, setControlType] = useState("orbit");
 //   const [permissionsGranted, setPermissionsGranted] = useState(false);
@@ -167,28 +192,3 @@ const imagePaths = [
 //     </mesh>
 //   );
 // };
-
-const VideoSphere = ({ videoSrc }) => {
-  console.log({ videoSrc });
-  const videoTexture = useVideoTexture(videoSrc);
-  const sphereRef = useRef();
-
-  return (
-    <mesh ref={sphereRef}>
-      <sphereGeometry args={[500, 60, 40]} />
-      <meshBasicMaterial map={videoTexture} side={THREE.BackSide} />
-    </mesh>
-  );
-};
-
-const VidViewer = ({ videoSrc }) => {
-  return (
-    <Canvas style={{ border: "1px solid black", width: "100%", height: "80%" }}>
-      <ambientLight intensity={0.5} />
-      <VideoSphere videoSrc={videoSrc} />
-      <OrbitControls enableZoom={false} />
-    </Canvas>
-  );
-};
-
-export default VidViewer;
