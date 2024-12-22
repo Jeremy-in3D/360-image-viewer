@@ -16,7 +16,7 @@ const imagePaths = [
 ];
 
 const VideoSphere = ({ videoSrc }) => {
-  console.log({ videoSrc });
+  // console.log({ videoSrc });
   const videoTexture = useVideoTexture(videoSrc);
   const sphereRef = useRef();
 
@@ -29,15 +29,70 @@ const VideoSphere = ({ videoSrc }) => {
 };
 
 const VidViewer = ({ videoSrc }) => {
+  const [currentTime, setCurrentTime] = useState(0);
+  const videoRef = useRef();
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    // Autoplay the video
+    const playVideo = async () => {
+      try {
+        await videoElement.play();
+      } catch (err) {
+        console.error("Playback was prevented:", err);
+      }
+    };
+
+    // Event listener for updating time
+    const handleTimeUpdate = () => setCurrentTime(videoElement.currentTime);
+
+    videoElement.addEventListener("timeupdate", handleTimeUpdate);
+    playVideo(); // Try to autoplay the video
+
+    // Cleanup listener on component unmount
+    return () => {
+      videoElement.removeEventListener("timeupdate", handleTimeUpdate);
+    };
+  }, []);
+
   return (
-    <Canvas style={{ border: "1px solid black", width: "100%", height: "80%" }}>
-      <ambientLight intensity={0.5} />
-      <VideoSphere videoSrc={videoSrc} />
-      <OrbitControls enableZoom={false} />
-    </Canvas>
+    <div style={{ position: "relative", width: "100%", height: "80%" }}>
+      <Canvas
+        style={{ border: "1px solid black", width: "100%", height: "100%" }}
+      >
+        <ambientLight intensity={0.5} />
+        <VideoSphere videoSrc={videoSrc} />
+        <OrbitControls enableZoom={false} />
+      </Canvas>
+      <video ref={videoRef} style={{ display: "none" }} muted>
+        <source src={videoSrc} type="video/mp4" />
+      </video>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "10px",
+          left: "10px",
+          color: "white",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          padding: "5px",
+          borderRadius: "3px",
+        }}
+      >
+        {formatTime(currentTime)}
+      </div>
+    </div>
   );
 };
 
+// Helper function to format time in minutes:seconds
+const formatTime = (timeInSeconds) => {
+  const minutes = Math.floor(timeInSeconds / 60);
+  const seconds = Math.floor(timeInSeconds % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${minutes}:${seconds}`;
+};
 export default VidViewer;
 
 // function imageViewer({ imagePath }) {
