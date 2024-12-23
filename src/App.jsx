@@ -90,9 +90,5 @@ function App() {
 export default App;
 
 const FallBackViewer = () => (
-  <div
-    style={{ position: "relative", border: "1px solid yellow", height: "50%" }}
-  >
-    Loading...
-  </div>
+  <div style={{ position: "relative", height: "50%" }}>Loading...</div>
 );
