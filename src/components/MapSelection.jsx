@@ -30,11 +30,7 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
           marginRight: "7%",
         }}
       >
-        <img
-          style={{ border: "1px solid red", height: "50%" }}
-          src={`/images/MapsSVG.svg`}
-          alt="Description of image"
-        />
+        <img src={`/images/MapsSVG.svg`} alt="Description of image" />
       </div>
     </div>
   );
