@@ -7,6 +7,7 @@ const imagePaths = [
 
 export const Map = ({ selectedImage, setSelectedImage }) => {
   const images = [0, 1, 2, 3];
+  const numbers = [29, 48, 55, 95];
   return (
     <div className="map-wrapper">
       {images.map((image, idx) => (
@@ -20,15 +21,21 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
             backgroundImage: `url(${imagePaths[idx]})`,
           }}
           className="image-preview"
-        ></div>
+        >{`${numbers[idx]}`}</div>
       ))}
       <div
         style={{
-          border: "1px solid white",
-          width: "100%",
+          width: "110%",
           position: "absolute",
+          marginRight: "7%",
         }}
-      ></div>
+      >
+        <img
+          style={{ border: "1px solid red", height: "50%" }}
+          src={`/images/MapsSVG.svg`}
+          alt="Description of image"
+        />
+      </div>
     </div>
   );
 };

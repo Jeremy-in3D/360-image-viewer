@@ -5,8 +5,8 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  /* background-color: #242424; */
+  background-color: black;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -29,27 +29,30 @@ body {
 .app-wrapper {
   height: 100%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .map-wrapper {
-  height: 15%;
-  margin-top: 2em;
-  border-top: 1px solid orange;
-  border-bottom: 1px solid orange;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   width: 100%;
+  flex: 1;
+  background-color: white;
 }
 
 .image-preview {
-  height: 55px;
-  width: 55px;
-  background-color: red;
+  height: 35px;
+  width: 35px;
+  background-color: black;
   /* background-image: url("/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg"); */
   border-radius: 50%;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   z-index: 1;
+  font-weight: bold;
+  color: white;
 }
