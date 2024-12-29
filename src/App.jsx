@@ -8,12 +8,7 @@ const LazyImageViewer = lazy(() => import("./components/ImageViewer"));
 //query image-1 qr url: https://360-image-viewer-beige.vercel.app?image=item1
 
 // QUERY PARAM EXAMPLE:  `https://yourapp.com?image=item1`
-const imagePaths = [
-  "/images/48.png",
-  "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg",
-  "/images/49.png",
-  "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg",
-];
+
 function App() {
   const [selectedImage, setSelectedImage] = useState(0);
 
@@ -34,24 +29,11 @@ function App() {
     const imageParam = queryParams.get("image");
 
     if (imageParam) {
-      console.log({ imageParam });
       setSelectedImage(getImageBasedOnParam(imageParam));
     }
   }, []);
 
   const getImageBasedOnParam = (param) => {
-    // switch (param) {
-    //   case "item1":
-    //     return "/images/48.png";
-    //   case "item2":
-    //     return "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg";
-    //   case "item3":
-    //     return "/images/49.png";
-    //   case "item4":
-    //     return "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg";
-    //   default:
-    //     return "/images/48.png";
-    // }
     switch (param) {
       case "item1":
         return 0;
@@ -76,12 +58,12 @@ function App() {
           }
         /> */}
 
-        <LazyImageViewer
-          imageIndex={selectedImage}
-          videoPath={"/images/360Video_part01_int.mp4"}
+        <LazyImageViewer imageIndex={selectedImage} />
+        <Map
+          setSelectedImage={setSelectedImage}
+          selectedImage={selectedImage}
         />
       </Suspense>
-      <Map setSelectedImage={setSelectedImage} selectedImage={selectedImage} />
     </div>
   );
 }
@@ -89,5 +71,17 @@ function App() {
 export default App;
 
 const FallBackViewer = () => (
-  <div style={{ position: "relative", height: "50%" }}>Loading...</div>
+  <div
+    style={{
+      position: "relative",
+      height: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
+    <Spinner />
+  </div>
 );
+
+const Spinner = () => <div className="loader"></div>;

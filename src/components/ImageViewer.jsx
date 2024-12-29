@@ -1,37 +1,8 @@
-import React, { useEffect, useRef, useState, Suspense } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import {
-  OrbitControls,
-  useTexture,
-  // Sphere,
-  // useVideoTexture,
-} from "@react-three/drei";
+import React, { useEffect, useState, Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-
-// const VideoSphere = ({ videoSrc }) => {
-//   console.log({ videoSrc });
-//   const videoTexture = useVideoTexture(videoSrc);
-//   const sphereRef = useRef();
-
-//   return (
-//     <mesh ref={sphereRef} scale={[-1, 1, 1]}>
-//       <sphereGeometry args={[500, 60, 40]} />
-//       <meshBasicMaterial map={videoTexture} side={THREE.BackSide} />
-//     </mesh>
-//   );
-// };
-
-// const VidViewer = ({ videoSrc }) => {
-//   return (
-//     <Canvas style={{ border: "1px solid black", width: "100%", height: "80%" }}>
-//       <ambientLight intensity={0.5} />
-//       <VideoSphere videoSrc={videoSrc} />
-//       <OrbitControls enableZoom={false} />
-//     </Canvas>
-//   );
-// };
-
-// export default VidViewer;
+import { CameraController } from "./scene/CameraController";
+import { SphereImage } from "./scene/SphereImage";
 
 const imagePaths = [
   "/images/29_Final_cmpr.png",
@@ -40,15 +11,42 @@ const imagePaths = [
   "/images/95_Final_cmpr.png",
 ];
 
-// Preload all textures at once
-const usePreloadedTextures = (imagePaths) => {
-  const textures = useTexture(imagePaths);
+const usePreloadTextures = (initialIndex) => {
+  // State to hold the loaded textures
+  const [textures, setTextures] = useState([]);
+
+  // Load only the initial image on first render
+  useEffect(() => {
+    const initialTextureLoader = new THREE.TextureLoader();
+    initialTextureLoader.load(imagePaths[initialIndex], (texture) => {
+      setTextures((prevTextures) => {
+        const newTextures = [...prevTextures];
+        newTextures[initialIndex] = texture;
+        return newTextures;
+      });
+
+      // Preload the rest of the images
+      imagePaths.forEach((path, index) => {
+        if (index !== initialIndex) {
+          initialTextureLoader.load(path, (loadedTexture) => {
+            setTextures((prevTextures) => {
+              const newTextures = [...prevTextures];
+              newTextures[index] = loadedTexture;
+              return newTextures;
+            });
+          });
+        }
+      });
+    });
+  }, [initialIndex]);
+
   return textures;
 };
 
 function ImageViewer({ imageIndex }) {
   const [controlType, setControlType] = useState("orbit");
   const [permissionsGranted, setPermissionsGranted] = useState(false);
+  const textures = usePreloadTextures(0); // Preload textures with the first as initial
 
   const handleOrientationPermission = () => {
     if (
@@ -75,7 +73,7 @@ function ImageViewer({ imageIndex }) {
   };
 
   return (
-    <div style={{ flex: 1, zIndex: 2 }}>
+    <div style={{ flex: 4, zIndex: 2 }}>
       <button
         onClick={handleToggle}
         style={{
@@ -104,7 +102,7 @@ function ImageViewer({ imageIndex }) {
           permissionsGranted={permissionsGranted}
         />
         <Suspense fallback={null}>
-          <SphereImage imageIndex={imageIndex} />
+          <SphereImage texture={textures[imageIndex] || textures[0]} />
         </Suspense>
       </Canvas>
     </div>
@@ -114,76 +112,29 @@ function ImageViewer({ imageIndex }) {
 const MemoizedImageViewer = React.memo(ImageViewer);
 export default MemoizedImageViewer;
 
-const SphereImage = ({ imageIndex }) => {
-  const texture = usePreloadedTextures(imagePaths)[imageIndex]; // Ensure index is passed properly
+// GOOD VIDEO:
 
-  return (
-    <mesh scale={[-1, 1, 1]}>
-      <sphereGeometry args={[500, 60, 40]} />
-      <meshBasicMaterial map={texture} side={THREE.BackSide} />
-    </mesh>
-  );
-};
-
-const CameraController = ({ controlType, permissionsGranted }) => {
-  const { camera } = useThree();
-  const controlsRef = useRef();
-  const animData = useRef({ alpha: 0, beta: 0, gamma: 0 });
-
-  const handleOrientation = (event) => {
-    animData.current.alpha = event.alpha || 0;
-    animData.current.beta = event.beta || 0;
-    animData.current.gamma = event.gamma || 0;
-  };
-
-  useEffect(() => {
-    if (controlType === "device" && permissionsGranted) {
-      window.addEventListener("deviceorientation", handleOrientation, true);
-    }
-    return () => {
-      window.removeEventListener("deviceorientation", handleOrientation, true);
-    };
-  }, [controlType, permissionsGranted]);
-
-  useFrame(() => {
-    if (controlType === "device" && animData.current) {
-      const { alpha, beta } = animData.current;
-      camera.rotation.set(
-        THREE.MathUtils.degToRad(-(90 - beta)),
-        THREE.MathUtils.degToRad(alpha),
-        0,
-        "YXZ"
-      );
-    }
-    if (controlType === "orbit" && controlsRef.current) {
-      controlsRef.current.update();
-    }
-  });
-
-  return controlType === "orbit" ? (
-    <OrbitControls ref={controlsRef} enableZoom={false} />
-  ) : null;
-};
-
-// const SphereVideo = ({ videoPath }) => {
-//   const videoRef = useRef();
-
-//   useEffect(() => {
-//     if (!videoRef.current) {
-//       const video = document.createElement("video");
-//       video.src = videoPath;
-//       video.crossOrigin = "anonymous"; // optional, based on where you're loading the video from
-//       video.loop = true; // loop the video
-//       video.muted = true; // muted for autoplay
-//       video.play(); // start playing the video
-//       videoRef.current = new VideoTexture(video);
-//     }
-//   }, [videoPath]);
+// const VideoSphere = ({ videoSrc }) => {
+//   console.log({ videoSrc });
+//   const videoTexture = useVideoTexture(videoSrc);
+//   const sphereRef = useRef();
 
 //   return (
-//     <mesh>
+//     <mesh ref={sphereRef} scale={[-1, 1, 1]}>
 //       <sphereGeometry args={[500, 60, 40]} />
-//       <meshBasicMaterial map={videoRef.current} side={THREE.BackSide} />
+//       <meshBasicMaterial map={videoTexture} side={THREE.BackSide} />
 //     </mesh>
 //   );
 // };
+
+// const VidViewer = ({ videoSrc }) => {
+//   return (
+//     <Canvas style={{ border: "1px solid black", width: "100%", height: "80%" }}>
+//       <ambientLight intensity={0.5} />
+//       <VideoSphere videoSrc={videoSrc} />
+//       <OrbitControls enableZoom={false} />
+//     </Canvas>
+//   );
+// };
+
+// export default VidViewer;
