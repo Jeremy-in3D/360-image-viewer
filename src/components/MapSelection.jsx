@@ -1,28 +1,31 @@
 const imagePaths = [
-  "/images/48.png",
-  "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg",
-  "/images/49.png",
-  "/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg",
+  "/images/29_Final_cmpr.png",
+  "/images/48_Final_cmpr.png",
+  "/images/55_Final_cmpr.png",
+  "/images/95_Final_cmpr.png",
 ];
 
 export const Map = ({ selectedImage, setSelectedImage }) => {
   const images = [0, 1, 2, 3];
   const numbers = [29, 48, 55, 95];
+
+  const getImagePlacementStyles = (image) => {
+    switch (image) {
+      case 0:
+        return {};
+      case 1:
+        return { left: "16.5%", top: "20%" };
+      case 2:
+        return { left: "6%", bottom: "1.5%" };
+      case 3:
+        return { top: "5%" };
+      default:
+        return {};
+    }
+  };
+
   return (
     <div className="map-wrapper">
-      {images.map((image, idx) => (
-        <div
-          key={`key-${idx}`}
-          onClick={() =>
-            selectedImage == image ? null : setSelectedImage(image)
-          }
-          style={{
-            border: selectedImage == image ? "3px solid yellow" : "",
-            backgroundImage: `url(${imagePaths[idx]})`,
-          }}
-          className="image-preview"
-        >{`${numbers[idx]}`}</div>
-      ))}
       <div
         style={{
           width: "110%",
@@ -32,6 +35,21 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
       >
         <img src={`/images/MapsSVG.svg`} alt="Description of image" />
       </div>
+      {images.map((image, idx) => (
+        <div
+          key={`key-${idx}`}
+          onClick={() =>
+            selectedImage == image ? null : setSelectedImage(image)
+          }
+          style={{
+            position: "relative",
+            border: selectedImage == image ? "1px solid black" : "",
+            backgroundImage: `url(${imagePaths[idx]})`,
+            ...getImagePlacementStyles(idx),
+          }}
+          className="image-preview"
+        >{`${numbers[idx]}`}</div>
+      ))}
     </div>
   );
 };

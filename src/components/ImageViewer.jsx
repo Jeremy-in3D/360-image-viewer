@@ -1,8 +1,13 @@
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useState, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { CameraController } from "./scene/CameraController";
-import { SphereImage } from "./scene/SphereImage";
+// import { SphereImage } from "./scene/SphereImage";
+import {
+  useTexture,
+  // Sphere,
+  // useVideoTexture,
+} from "@react-three/drei";
 
 const imagePaths = [
   "/images/29_Final_cmpr.png",
@@ -11,42 +16,28 @@ const imagePaths = [
   "/images/95_Final_cmpr.png",
 ];
 
-const usePreloadTextures = (initialIndex) => {
-  // State to hold the loaded textures
-  const [textures, setTextures] = useState([]);
-
-  // Load only the initial image on first render
-  useEffect(() => {
-    const initialTextureLoader = new THREE.TextureLoader();
-    initialTextureLoader.load(imagePaths[initialIndex], (texture) => {
-      setTextures((prevTextures) => {
-        const newTextures = [...prevTextures];
-        newTextures[initialIndex] = texture;
-        return newTextures;
-      });
-
-      // Preload the rest of the images
-      imagePaths.forEach((path, index) => {
-        if (index !== initialIndex) {
-          initialTextureLoader.load(path, (loadedTexture) => {
-            setTextures((prevTextures) => {
-              const newTextures = [...prevTextures];
-              newTextures[index] = loadedTexture;
-              return newTextures;
-            });
-          });
-        }
-      });
-    });
-  }, [initialIndex]);
-
+// Preload all textures at once
+const usePreloadedTextures = (imagePaths) => {
+  const textures = useTexture(imagePaths);
   return textures;
+};
+
+const loadFirstImage = (
+  imageIdx,
+  hasFirstImageLoaded,
+  setHasFirstImageLoaded
+) => {
+  if (!hasFirstImageLoaded) {
+    const texture = useTexture(imagePaths[imageIdx]);
+    setHasFirstImageLoaded(true);
+    return texture;
+  }
 };
 
 function ImageViewer({ imageIndex }) {
   const [controlType, setControlType] = useState("orbit");
   const [permissionsGranted, setPermissionsGranted] = useState(false);
-  const textures = usePreloadTextures(0); // Preload textures with the first as initial
+  const [hasFirstImageLoaded, setHasFirstImageLoaded] = useState(false);
 
   const handleOrientationPermission = () => {
     if (
@@ -73,7 +64,7 @@ function ImageViewer({ imageIndex }) {
   };
 
   return (
-    <div style={{ flex: 4, zIndex: 2 }}>
+    <div style={{ flex: 3, zIndex: 2 }}>
       <button
         onClick={handleToggle}
         style={{
@@ -94,7 +85,7 @@ function ImageViewer({ imageIndex }) {
       <Canvas
         linear={true}
         style={{ height: "100%" }}
-        toneMapping={THREE.NoToneMapping}
+        // toneMapping={THREE.NoToneMapping}
       >
         <ambientLight />
         <CameraController
@@ -102,7 +93,11 @@ function ImageViewer({ imageIndex }) {
           permissionsGranted={permissionsGranted}
         />
         <Suspense fallback={null}>
-          <SphereImage texture={textures[imageIndex] || textures[0]} />
+          <SphereImage
+            imageIndex={imageIndex}
+            setHasFirstImageLoaded={setHasFirstImageLoaded}
+            hasFirstImageLoaded={hasFirstImageLoaded}
+          />
         </Suspense>
       </Canvas>
     </div>
@@ -111,6 +106,23 @@ function ImageViewer({ imageIndex }) {
 
 const MemoizedImageViewer = React.memo(ImageViewer);
 export default MemoizedImageViewer;
+
+const SphereImage = ({
+  imageIndex,
+  setHasFirstImageLoaded,
+  hasFirstImageLoaded,
+}) => {
+  const texture = hasFirstImageLoaded
+    ? usePreloadedTextures(imagePaths)[imageIndex]
+    : loadFirstImage(imageIndex, hasFirstImageLoaded, setHasFirstImageLoaded); // Ensure index is passed properly
+
+  return (
+    <mesh scale={[-1, 1, 1]}>
+      <sphereGeometry args={[500, 60, 40]} />
+      <meshBasicMaterial map={texture} side={THREE.BackSide} />
+    </mesh>
+  );
+};
 
 // GOOD VIDEO:
 

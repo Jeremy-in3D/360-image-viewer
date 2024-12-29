@@ -34,6 +34,10 @@ body {
   /* justify-content: space-evenly; */
 }
 
+.fall-back-wrapper {
+  height: 100%;
+}
+
 .map-wrapper {
   display: flex;
   justify-content: space-evenly;
@@ -52,6 +56,9 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 1;
   font-weight: bold;
   color: white;
