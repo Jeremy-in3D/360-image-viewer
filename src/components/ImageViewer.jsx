@@ -48,11 +48,19 @@ function ImageViewer({ imageIndex }) {
         .then((permissionState) => {
           if (permissionState === "granted") {
             setPermissionsGranted(true);
+          } else {
+            alert("Device orientation permission denied.");
           }
         })
         .catch(console.error);
     } else {
-      setPermissionsGranted(true);
+      // Directly set permissions granted if explicit request function is not available
+      // This is a fallback for browsers that may handle permissions natively or don't require them
+      if ("ondeviceorientation" in window) {
+        setPermissionsGranted(true);
+      } else {
+        alert("Your browser does not support device orientation.");
+      }
     }
   };
 
