@@ -22,22 +22,22 @@ const usePreloadedTextures = (imagePaths) => {
   return textures;
 };
 
-const loadFirstImage = (
-  imageIdx,
-  hasFirstImageLoaded,
-  setHasFirstImageLoaded
-) => {
-  if (!hasFirstImageLoaded) {
-    const texture = useTexture(imagePaths[imageIdx]);
-    setHasFirstImageLoaded(true);
-    return texture;
-  }
-};
+// const loadFirstImage = (
+//   imageIdx,
+//   hasFirstImageLoaded,
+//   setHasFirstImageLoaded
+// ) => {
+//   if (!hasFirstImageLoaded) {
+//     const texture = useTexture(imagePaths[imageIdx]);
+//     setHasFirstImageLoaded(true);
+//     return texture;
+//   }
+// };
 
 function ImageViewer({ imageIndex }) {
   const [controlType, setControlType] = useState("orbit");
   const [permissionsGranted, setPermissionsGranted] = useState(false);
-  const [hasFirstImageLoaded, setHasFirstImageLoaded] = useState(false);
+  // const [hasFirstImageLoaded, setHasFirstImageLoaded] = useState(false);
 
   const handleOrientationPermission = () => {
     if (
@@ -72,15 +72,26 @@ function ImageViewer({ imageIndex }) {
           top: "20px",
           left: "20px",
           zIndex: 1,
-          padding: "10px 20px",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          padding: 0,
+          // padding: "10px 20px",
+          // backgroundColor: "rgba(0, 0, 0, 0.5)",
+          width: "15%",
           color: "white",
           border: "none",
           borderRadius: "5px",
+          background: "none",
           cursor: "pointer",
         }}
       >
-        Toggle Control: {controlType}
+        {/* Toggle Control: {controlType} */}
+        <img
+          style={{ width: "100%", height: "100%", display: "block" }}
+          src={
+            controlType == "device"
+              ? "/images/AR_mode.png"
+              : "/images/phone_mode.png"
+          }
+        />
       </button>
       <Canvas
         linear={true}
@@ -95,8 +106,8 @@ function ImageViewer({ imageIndex }) {
         <Suspense fallback={null}>
           <SphereImage
             imageIndex={imageIndex}
-            setHasFirstImageLoaded={setHasFirstImageLoaded}
-            hasFirstImageLoaded={hasFirstImageLoaded}
+            // setHasFirstImageLoaded={setHasFirstImageLoaded}
+            // hasFirstImageLoaded={hasFirstImageLoaded}
           />
         </Suspense>
       </Canvas>
@@ -109,12 +120,14 @@ export default MemoizedImageViewer;
 
 const SphereImage = ({
   imageIndex,
-  setHasFirstImageLoaded,
-  hasFirstImageLoaded,
+  // setHasFirstImageLoaded,
+  // hasFirstImageLoaded,
 }) => {
-  const texture = hasFirstImageLoaded
-    ? usePreloadedTextures(imagePaths)[imageIndex]
-    : loadFirstImage(imageIndex, hasFirstImageLoaded, setHasFirstImageLoaded); // Ensure index is passed properly
+  const texture =
+    // hasFirstImageLoaded;
+    // ?
+    usePreloadedTextures(imagePaths)[imageIndex];
+  // : loadFirstImage(imageIndex, hasFirstImageLoaded, setHasFirstImageLoaded); // Ensure index is passed properly
 
   return (
     <mesh scale={[-1, 1, 1]}>

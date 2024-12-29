@@ -16,9 +16,9 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
       case 1:
         return { left: "16.5%", top: "20%" };
       case 2:
-        return { left: "6%", bottom: "1.5%" };
+        return { left: "6%", bottom: "5%" };
       case 3:
-        return { top: "5%" };
+        return { top: "2%" };
       default:
         return {};
     }
