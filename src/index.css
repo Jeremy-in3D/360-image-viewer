@@ -38,7 +38,11 @@ body {
   height: 100%;
 }
 
+.greyscale-animation {
+}
+
 .map-wrapper {
+  z-index: 5;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -47,9 +51,21 @@ body {
   background-color: rgb(229, 224, 224);
 }
 
+.map-control-btn {
+  /* position: absolute; */
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  padding: 0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  background: none;
+}
+
 .image-preview {
-  height: 35px;
-  width: 35px;
+  height: 30px;
+  width: 30px;
   background-color: black;
   /* background-image: url("/images/vecteezy_an-unforgettable-360-panorama-of-the-dolomites_20803210.jpg"); */
   border-radius: 50%;
@@ -59,9 +75,59 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 20;
   font-weight: bold;
   color: white;
+}
+
+/* .loading-screen-wrapper {
+  height: 100%;
+  width: 100%;
+  background: black;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+} */
+
+.loading-screen-wrapper {
+  position: absolute;
+
+  height: 100%; /* Full viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #3b3a3a; /* example background color */
+  z-index: 30;
+}
+
+.image {
+  filter: grayscale(100%);
+  animation: colorTransition 3s forwards;
+}
+
+.overlay {
+  background: white;
+  animation: reveal 3s forwards;
+}
+
+@keyframes reveal {
+  from {
+    left: 0;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes colorTransition {
+  from {
+    filter: grayscale(100%);
+  }
+  to {
+    filter: grayscale(0%);
+  }
 }
 
 .loader {
@@ -80,4 +146,23 @@ body {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.map-container {
+  position: absolute;
+  bottom: -100%; /* start off-screen */
+  left: 0;
+  right: 0;
+  transition: bottom 0.3s ease-out;
+  /* Ensure it's above other content if needed */
+  z-index: 20;
+  height: 37%;
+}
+
+.map-container.visible {
+  bottom: 5%; /* slide up to visible position */
+}
+
+.map-container.hidden {
+  bottom: -100%; /* slide down out of view */
 }

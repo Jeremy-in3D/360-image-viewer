@@ -14,9 +14,9 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
       case 0:
         return {};
       case 1:
-        return { left: "16.5%", top: "20%" };
+        return { left: "16.5%" };
       case 2:
-        return { left: "6%", bottom: "5%" };
+        return { left: "6%", top: "20%" };
       case 3:
         return { top: "2%" };
       default:
@@ -28,28 +28,57 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
     <div className="map-wrapper">
       <div
         style={{
-          width: "110%",
+          width: "96%",
           position: "absolute",
-          marginRight: "7%",
+          border: "2px solid black",
+          borderRadius: "25px",
+          height: "17%",
+          bottom: "5%",
+          background: "white",
+          // backgroundImage: "url(/images/map_new.png)",
+          // backgroundSize: "contain",
+          // backgroundPosition: "center",
+          // backgroundRepeat: "no-repeat",
         }}
       >
-        <img src={`/images/MapsSVG.svg`} alt="Description of image" />
-      </div>
-      {images.map((image, idx) => (
-        <div
-          key={`key-${idx}`}
-          onClick={() =>
-            selectedImage == image ? null : setSelectedImage(image)
-          }
+        <img
+          src={`/images/map_new.png`}
+          alt="map"
           style={{
-            position: "relative",
-            border: selectedImage == image ? "1px solid black" : "",
-            backgroundImage: `url(${imagePaths[idx]})`,
-            ...getImagePlacementStyles(idx),
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: "25px",
           }}
-          className="image-preview"
-        >{`${numbers[idx]}`}</div>
-      ))}
+        />
+        <div
+          style={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "space-evenly",
+            height: "100%",
+            top: "30%",
+            width: "100%",
+          }}
+        >
+          {images.map((image, idx) => (
+            <div
+              key={`key-${idx}`}
+              onClick={() =>
+                selectedImage == image ? null : setSelectedImage(image)
+              }
+              style={{
+                position: "relative",
+                border: "1px solid black",
+                // border: selectedImage == image ? "1px solid black" : "",
+                backgroundImage: `url(${imagePaths[idx]})`,
+                ...getImagePlacementStyles(idx),
+              }}
+              className="image-preview"
+            >{`${numbers[idx]}`}</div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

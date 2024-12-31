@@ -1,6 +1,7 @@
 import React, { useEffect, useState, Suspense, lazy } from "react";
 import "./App.css";
 import { Map } from "./components/MapSelection";
+import { LoadingScreen } from "./components/LoadingScreen";
 // import VidViewer from "./components/ImageViewer";
 
 const LazyImageViewer = lazy(() => import("./components/ImageViewer"));
@@ -11,7 +12,9 @@ const LazyImageViewer = lazy(() => import("./components/ImageViewer"));
 
 function App() {
   const [selectedImage, setSelectedImage] = useState(0);
-
+  const [isLoadingScreen, setIsLoadingScreen] = useState(false);
+  const [isMapVisible, setIsMapVisible] = useState(true);
+  console.log({ isMapVisible });
   useEffect(() => {
     const updateHeight = () => {
       const doc = document.documentElement;
@@ -50,6 +53,7 @@ function App() {
 
   return (
     <div className="app-wrapper">
+      {false ? <LoadingScreen /> : null}
       <Suspense fallback={<FallBackViewer />}>
         {/* <VidViewer
           videoSrc={
@@ -58,11 +62,19 @@ function App() {
           }
         /> */}
 
-        <LazyImageViewer imageIndex={selectedImage} />
-        <Map
-          setSelectedImage={setSelectedImage}
-          selectedImage={selectedImage}
+        <LazyImageViewer
+          imageIndex={selectedImage}
+          isMapVisible={isMapVisible}
+          setIsMapVisible={setIsMapVisible}
         />
+        {/* <div className={`map-container ${isMapVisible ? "visible" : "hidden"}`}> */}
+        {isMapVisible ? (
+          <Map
+            setSelectedImage={setSelectedImage}
+            selectedImage={selectedImage}
+          />
+        ) : null}
+        {/* </div> */}
       </Suspense>
     </div>
   );

@@ -16,25 +16,12 @@ const imagePaths = [
   "/images/95_Final_cmpr.png",
 ];
 
-// Preload all textures at once
 const usePreloadedTextures = (imagePaths) => {
   const textures = useTexture(imagePaths);
   return textures;
 };
 
-// const loadFirstImage = (
-//   imageIdx,
-//   hasFirstImageLoaded,
-//   setHasFirstImageLoaded
-// ) => {
-//   if (!hasFirstImageLoaded) {
-//     const texture = useTexture(imagePaths[imageIdx]);
-//     setHasFirstImageLoaded(true);
-//     return texture;
-//   }
-// };
-
-function ImageViewer({ imageIndex }) {
+function ImageViewer({ imageIndex, isMapVisible, setIsMapVisible }) {
   const [controlType, setControlType] = useState("orbit");
   const [permissionsGranted, setPermissionsGranted] = useState(false);
   // const [hasFirstImageLoaded, setHasFirstImageLoaded] = useState(false);
@@ -72,35 +59,13 @@ function ImageViewer({ imageIndex }) {
   };
 
   return (
-    <div style={{ flex: 3, zIndex: 2 }}>
-      <button
-        onClick={handleToggle}
-        style={{
-          position: "absolute",
-          top: "20px",
-          left: "20px",
-          zIndex: 1,
-          padding: 0,
-          // padding: "10px 20px",
-          // backgroundColor: "rgba(0, 0, 0, 0.5)",
-          width: "15%",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          background: "none",
-          cursor: "pointer",
-        }}
-      >
-        {/* Toggle Control: {controlType} */}
-        <img
-          style={{ width: "100%", height: "100%", display: "block" }}
-          src={
-            controlType == "device"
-              ? "/images/AR_mode.png"
-              : "/images/phone_mode.png"
-          }
-        />
-      </button>
+    <div style={{ height: "100%", zIndex: 2 }}>
+      <MapControlBtns
+        handleToggle={handleToggle}
+        controlType={controlType}
+        isMapVisible={isMapVisible}
+        setIsMapVisible={setIsMapVisible}
+      />
       <Canvas
         linear={true}
         style={{ height: "100%" }}
@@ -112,11 +77,7 @@ function ImageViewer({ imageIndex }) {
           permissionsGranted={permissionsGranted}
         />
         <Suspense fallback={null}>
-          <SphereImage
-            imageIndex={imageIndex}
-            // setHasFirstImageLoaded={setHasFirstImageLoaded}
-            // hasFirstImageLoaded={hasFirstImageLoaded}
-          />
+          <SphereImage imageIndex={imageIndex} />
         </Suspense>
       </Canvas>
     </div>
@@ -171,3 +132,56 @@ const SphereImage = ({
 // };
 
 // export default VidViewer;
+
+const MapControlBtns = ({
+  handleToggle,
+  controlType,
+  isMapVisible,
+  setIsMapVisible,
+}) => {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        zIndex: 20,
+        bottom: "28%",
+        width: "auto",
+        right: "1%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-evenly",
+        alignItems: "flex-end",
+      }}
+    >
+      <button onClick={handleToggle} className="map-control-btn">
+        {/* Toggle Control: {controlType} */}
+        <img
+          style={{
+            width: "80px",
+            height: "100%",
+            display: "block",
+          }}
+          src={
+            controlType == "device"
+              ? "/images/AR_mode.png"
+              : "/images/phone_mode.png"
+          }
+        />
+      </button>
+      <button
+        className="map-control-btn"
+        style={{ marginTop: "1.5em" }}
+        onClick={() => setIsMapVisible(!isMapVisible)}
+      >
+        <img
+          style={{
+            width: "80px",
+            height: "100%",
+            display: "block",
+          }}
+          src={isMapVisible ? "/images/map_down.png" : "/images/map_up.png"}
+        />
+      </button>
+    </div>
+  );
+};
