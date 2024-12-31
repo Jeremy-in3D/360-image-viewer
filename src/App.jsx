@@ -13,7 +13,7 @@ const LazyImageViewer = lazy(() => import("./components/ImageViewer"));
 function App() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isLoadingScreen, setIsLoadingScreen] = useState(false);
-  const [isMapVisible, setIsMapVisible] = useState(true);
+  const [isMapVisible, setIsMapVisible] = useState(false);
   console.log({ isMapVisible });
   useEffect(() => {
     const updateHeight = () => {

@@ -146,7 +146,7 @@ const MapControlBtns = ({
         zIndex: 20,
         bottom: "28%",
         width: "auto",
-        right: "1%",
+        right: "10%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-evenly",
