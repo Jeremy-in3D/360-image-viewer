@@ -41,6 +41,15 @@ body {
 .greyscale-animation {
 }
 
+.map-and-btns-container {
+  width: 96%;
+  position: absolute;
+  border: 2px solid black;
+  border-radius: 25px;
+  bottom: 5%;
+  background: white;
+}
+
 .map-wrapper {
   z-index: 5;
   display: flex;
@@ -75,7 +84,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 20;
+  z-index: 15;
   font-weight: bold;
   color: white;
 }
@@ -99,7 +108,7 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #3b3a3a; /* example background color */
-  z-index: 30;
+  z-index: 10;
 }
 
 .image {
@@ -155,7 +164,7 @@ body {
   right: 0;
   transition: bottom 0.3s ease-out;
   /* Ensure it's above other content if needed */
-  z-index: 20;
+  z-index: 15;
   height: 37%;
 }
 
@@ -184,7 +193,7 @@ body {
   }
   to {
     opacity: 1;
-    transform: translateY(-4em);
+    transform: translateY(-3em);
   }
 }
 
@@ -202,4 +211,21 @@ body {
 
 .map-control-btn.clicked {
   animation: shrinkGrow 0.3s ease-in-out;
+}
+
+@media screen and (orientation: landscape) {
+  .map-and-btns-container {
+    width: 60%;
+    bottom: 0px;
+  }
+  @keyframes fadeInMoveUp {
+    from {
+      opacity: 0;
+      transform: translateY(2em);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(-1em);
+    }
+  }
 }

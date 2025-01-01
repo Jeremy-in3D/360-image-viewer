@@ -26,21 +26,7 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
 
   return (
     <div className=" contact-us-text-wrapper contact-us-line-0 map-wrapper">
-      <div
-        style={{
-          width: "96%",
-          position: "absolute",
-          border: "2px solid black",
-          borderRadius: "25px",
-          // height: "17%",
-          bottom: "5%",
-          background: "white",
-          // backgroundImage: "url(/images/map_new.png)",
-          // backgroundSize: "contain",
-          // backgroundPosition: "center",
-          // backgroundRepeat: "no-repeat",
-        }}
-      >
+      <div className="map-and-btns-container">
         <img
           src={`/images/map_new.png`}
           alt="map"
