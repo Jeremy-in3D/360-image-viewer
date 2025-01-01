@@ -56,7 +56,7 @@ const SphereImage = ({ imageIndex }) => {
 
   return (
     <mesh scale={[-1, 1, 1]}>
-      <sphereGeometry args={[500, 60, 40]} />
+      <sphereGeometry args={[500, 45, 30]} />
       <meshBasicMaterial map={texture} side={THREE.BackSide} />
     </mesh>
   );
