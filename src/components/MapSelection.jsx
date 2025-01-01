@@ -61,7 +61,7 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
                 ...getImagePlacementStyles(idx),
               }}
               className="image-preview"
-            >{`${numbers[idx]}`}</div>
+            ></div>
           ))}
         </div>
       </div>
