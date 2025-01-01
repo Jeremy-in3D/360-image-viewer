@@ -179,7 +179,7 @@ body {
 .contact-us-text-wrapper {
   opacity: 0;
   transform: translateY(20px);
-  animation: fadeInMoveUp 0.6s ease-out forwards;
+  animation: fadeInMoveUp 0.7s ease-out forwards;
 }
 
 .contact-us-line-0 {
