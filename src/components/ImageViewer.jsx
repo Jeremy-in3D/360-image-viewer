@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { CameraController } from "./scene/CameraController";
@@ -71,6 +71,18 @@ export const MapControlBtns = ({
   const [isMapIconClicked, setIsMapIconClicked] = useState(false);
   const [isOrientationIconClicked, setIsOrientationIconClicked] =
     useState(false);
+  const [rerenderTrigger, setRerenderTrigger] = useState(false);
+
+  useEffect(() => {
+    // Trigger a rerender after 3 seconds
+    if (!rerenderTrigger) {
+      const timeoutId = setTimeout(() => {
+        setRerenderTrigger(true);
+      }, 3000);
+
+      return () => clearTimeout(timeoutId); // Cleanup on component unmount
+    }
+  }, []);
 
   const handleMapControlsViewClick = () => {
     // Toggle the clicked state to trigger the animation

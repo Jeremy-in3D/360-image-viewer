@@ -18,7 +18,6 @@ function App() {
   const [controlType, setControlType] = useState("orbit");
   const [permissionsGranted, setPermissionsGranted] = useState(false);
 
-  console.log({ isMapVisible });
   useEffect(() => {
     const updateHeight = () => {
       const doc = document.documentElement;
