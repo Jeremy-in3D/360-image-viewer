@@ -28,50 +28,8 @@ function ImageViewer({
   controlType,
   permissionsGranted,
 }) {
-  // const [controlType, setControlType] = useState("orbit");
-  // const [permissionsGranted, setPermissionsGranted] = useState(false);
-  // const [hasFirstImageLoaded, setHasFirstImageLoaded] = useState(false);
-
-  // const handleOrientationPermission = () => {
-  //   if (
-  //     typeof DeviceOrientationEvent !== "undefined" &&
-  //     typeof DeviceOrientationEvent.requestPermission === "function"
-  //   ) {
-  //     DeviceOrientationEvent.requestPermission()
-  //       .then((permissionState) => {
-  //         if (permissionState === "granted") {
-  //           setPermissionsGranted(true);
-  //         } else {
-  //           alert("Device orientation permission denied.");
-  //         }
-  //       })
-  //       .catch(console.error);
-  //   } else {
-  //     // Directly set permissions granted if explicit request function is not available
-  //     // This is a fallback for browsers that may handle permissions natively or don't require them
-  //     if ("ondeviceorientation" in window) {
-  //       setPermissionsGranted(true);
-  //     } else {
-  //       alert("Your browser does not support device orientation.");
-  //     }
-  //   }
-  // };
-
-  // const handleToggle = () => {
-  //   if (controlType === "orbit" && !permissionsGranted) {
-  //     handleOrientationPermission();
-  //   }
-  //   setControlType((prev) => (prev === "orbit" ? "device" : "orbit"));
-  // };
-
   return (
     <div style={{ height: "100%", zIndex: 2 }}>
-      {/* <MapControlBtns
-        handleToggle={handleToggle}
-        controlType={controlType}
-        isMapVisible={isMapVisible}
-        setIsMapVisible={setIsMapVisible}
-      /> */}
       <Canvas
         linear={true}
         style={{ height: "100%" }}
@@ -93,16 +51,8 @@ function ImageViewer({
 const MemoizedImageViewer = React.memo(ImageViewer);
 export default MemoizedImageViewer;
 
-const SphereImage = ({
-  imageIndex,
-  // setHasFirstImageLoaded,
-  // hasFirstImageLoaded,
-}) => {
-  const texture =
-    // hasFirstImageLoaded;
-    // ?
-    usePreloadedTextures(imagePaths)[imageIndex];
-  // : loadFirstImage(imageIndex, hasFirstImageLoaded, setHasFirstImageLoaded); // Ensure index is passed properly
+const SphereImage = ({ imageIndex }) => {
+  const texture = usePreloadedTextures(imagePaths)[imageIndex];
 
   return (
     <mesh scale={[-1, 1, 1]}>
@@ -111,33 +61,6 @@ const SphereImage = ({
     </mesh>
   );
 };
-
-// GOOD VIDEO:
-
-// const VideoSphere = ({ videoSrc }) => {
-//   console.log({ videoSrc });
-//   const videoTexture = useVideoTexture(videoSrc);
-//   const sphereRef = useRef();
-
-//   return (
-//     <mesh ref={sphereRef} scale={[-1, 1, 1]}>
-//       <sphereGeometry args={[500, 60, 40]} />
-//       <meshBasicMaterial map={videoTexture} side={THREE.BackSide} />
-//     </mesh>
-//   );
-// };
-
-// const VidViewer = ({ videoSrc }) => {
-//   return (
-//     <Canvas style={{ border: "1px solid black", width: "100%", height: "80%" }}>
-//       <ambientLight intensity={0.5} />
-//       <VideoSphere videoSrc={videoSrc} />
-//       <OrbitControls enableZoom={false} />
-//     </Canvas>
-//   );
-// };
-
-// export default VidViewer;
 
 export const MapControlBtns = ({
   handleToggle,
@@ -219,3 +142,30 @@ export const MapControlBtns = ({
     </div>
   );
 };
+
+// GOOD VIDEO:
+
+// const VideoSphere = ({ videoSrc }) => {
+//   console.log({ videoSrc });
+//   const videoTexture = useVideoTexture(videoSrc);
+//   const sphereRef = useRef();
+
+//   return (
+//     <mesh ref={sphereRef} scale={[-1, 1, 1]}>
+//       <sphereGeometry args={[500, 60, 40]} />
+//       <meshBasicMaterial map={videoTexture} side={THREE.BackSide} />
+//     </mesh>
+//   );
+// };
+
+// const VidViewer = ({ videoSrc }) => {
+//   return (
+//     <Canvas style={{ border: "1px solid black", width: "100%", height: "80%" }}>
+//       <ambientLight intensity={0.5} />
+//       <VideoSphere videoSrc={videoSrc} />
+//       <OrbitControls enableZoom={false} />
+//     </Canvas>
+//   );
+// };
+
+// export default VidViewer;

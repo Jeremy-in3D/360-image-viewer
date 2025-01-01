@@ -78,8 +78,6 @@ function App() {
         })
         .catch(console.error);
     } else {
-      // Directly set permissions granted if explicit request function is not available
-      // This is a fallback for browsers that may handle permissions natively or don't require them
       if ("ondeviceorientation" in window) {
         setPermissionsGranted(true);
       } else {

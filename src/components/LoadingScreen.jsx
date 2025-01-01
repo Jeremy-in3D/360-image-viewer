@@ -18,7 +18,7 @@ export function LoadingScreen() {
           className="image"
           style={{
             borderRadius: "12px",
-            width: "60%",
+            width: "50%",
             position: "relative",
             zIndex: 1,
           }}
