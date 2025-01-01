@@ -21,51 +21,57 @@ const usePreloadedTextures = (imagePaths) => {
   return textures;
 };
 
-function ImageViewer({ imageIndex, isMapVisible, setIsMapVisible }) {
-  const [controlType, setControlType] = useState("orbit");
-  const [permissionsGranted, setPermissionsGranted] = useState(false);
+function ImageViewer({
+  imageIndex,
+  isMapVisible,
+  setIsMapVisible,
+  controlType,
+  permissionsGranted,
+}) {
+  // const [controlType, setControlType] = useState("orbit");
+  // const [permissionsGranted, setPermissionsGranted] = useState(false);
   // const [hasFirstImageLoaded, setHasFirstImageLoaded] = useState(false);
 
-  const handleOrientationPermission = () => {
-    if (
-      typeof DeviceOrientationEvent !== "undefined" &&
-      typeof DeviceOrientationEvent.requestPermission === "function"
-    ) {
-      DeviceOrientationEvent.requestPermission()
-        .then((permissionState) => {
-          if (permissionState === "granted") {
-            setPermissionsGranted(true);
-          } else {
-            alert("Device orientation permission denied.");
-          }
-        })
-        .catch(console.error);
-    } else {
-      // Directly set permissions granted if explicit request function is not available
-      // This is a fallback for browsers that may handle permissions natively or don't require them
-      if ("ondeviceorientation" in window) {
-        setPermissionsGranted(true);
-      } else {
-        alert("Your browser does not support device orientation.");
-      }
-    }
-  };
+  // const handleOrientationPermission = () => {
+  //   if (
+  //     typeof DeviceOrientationEvent !== "undefined" &&
+  //     typeof DeviceOrientationEvent.requestPermission === "function"
+  //   ) {
+  //     DeviceOrientationEvent.requestPermission()
+  //       .then((permissionState) => {
+  //         if (permissionState === "granted") {
+  //           setPermissionsGranted(true);
+  //         } else {
+  //           alert("Device orientation permission denied.");
+  //         }
+  //       })
+  //       .catch(console.error);
+  //   } else {
+  //     // Directly set permissions granted if explicit request function is not available
+  //     // This is a fallback for browsers that may handle permissions natively or don't require them
+  //     if ("ondeviceorientation" in window) {
+  //       setPermissionsGranted(true);
+  //     } else {
+  //       alert("Your browser does not support device orientation.");
+  //     }
+  //   }
+  // };
 
-  const handleToggle = () => {
-    if (controlType === "orbit" && !permissionsGranted) {
-      handleOrientationPermission();
-    }
-    setControlType((prev) => (prev === "orbit" ? "device" : "orbit"));
-  };
+  // const handleToggle = () => {
+  //   if (controlType === "orbit" && !permissionsGranted) {
+  //     handleOrientationPermission();
+  //   }
+  //   setControlType((prev) => (prev === "orbit" ? "device" : "orbit"));
+  // };
 
   return (
     <div style={{ height: "100%", zIndex: 2 }}>
-      <MapControlBtns
+      {/* <MapControlBtns
         handleToggle={handleToggle}
         controlType={controlType}
         isMapVisible={isMapVisible}
         setIsMapVisible={setIsMapVisible}
-      />
+      /> */}
       <Canvas
         linear={true}
         style={{ height: "100%" }}
@@ -133,7 +139,7 @@ const SphereImage = ({
 
 // export default VidViewer;
 
-const MapControlBtns = ({
+export const MapControlBtns = ({
   handleToggle,
   controlType,
   isMapVisible,

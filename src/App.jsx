@@ -2,6 +2,7 @@ import React, { useEffect, useState, Suspense, lazy } from "react";
 import "./App.css";
 import { Map } from "./components/MapSelection";
 import { LoadingScreen } from "./components/LoadingScreen";
+import { MapControlBtns } from "./components/ImageViewer";
 // import VidViewer from "./components/ImageViewer";
 
 const LazyImageViewer = lazy(() => import("./components/ImageViewer"));
@@ -14,6 +15,9 @@ function App() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isLoadingScreen, setIsLoadingScreen] = useState(false);
   const [isMapVisible, setIsMapVisible] = useState(false);
+  const [controlType, setControlType] = useState("orbit");
+  const [permissionsGranted, setPermissionsGranted] = useState(false);
+
   console.log({ isMapVisible });
   useEffect(() => {
     const updateHeight = () => {
@@ -51,6 +55,38 @@ function App() {
     }
   };
 
+  const handleOrientationPermission = () => {
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
+      DeviceOrientationEvent.requestPermission()
+        .then((permissionState) => {
+          if (permissionState === "granted") {
+            setPermissionsGranted(true);
+          } else {
+            alert("Device orientation permission denied.");
+          }
+        })
+        .catch(console.error);
+    } else {
+      // Directly set permissions granted if explicit request function is not available
+      // This is a fallback for browsers that may handle permissions natively or don't require them
+      if ("ondeviceorientation" in window) {
+        setPermissionsGranted(true);
+      } else {
+        alert("Your browser does not support device orientation.");
+      }
+    }
+  };
+
+  const handleToggle = () => {
+    if (controlType === "orbit" && !permissionsGranted) {
+      handleOrientationPermission();
+    }
+    setControlType((prev) => (prev === "orbit" ? "device" : "orbit"));
+  };
+
   return (
     <div className="app-wrapper">
       {false ? <LoadingScreen /> : null}
@@ -66,11 +102,19 @@ function App() {
           imageIndex={selectedImage}
           isMapVisible={isMapVisible}
           setIsMapVisible={setIsMapVisible}
+          controlType={controlType}
+          permissionsGranted={permissionsGranted}
         />
         {/* <div className={`map-container ${isMapVisible ? "visible" : "hidden"}`}> */}
 
         {/* </div> */}
       </Suspense>
+      <MapControlBtns
+        handleToggle={handleToggle}
+        controlType={controlType}
+        isMapVisible={isMapVisible}
+        setIsMapVisible={setIsMapVisible}
+      />
       {isMapVisible ? (
         <Map
           setSelectedImage={setSelectedImage}

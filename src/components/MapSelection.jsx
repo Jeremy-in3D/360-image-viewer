@@ -25,7 +25,7 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
   };
 
   return (
-    <div className=" contact-us-text-wrapper contact-us-line-0 map-wrapper">
+    <div className="contact-us-text-wrapper contact-us-line-0 map-wrapper">
       <div className="map-and-btns-container">
         <img
           src={`/images/map_new.png`}
