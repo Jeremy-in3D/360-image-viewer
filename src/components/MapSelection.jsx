@@ -25,14 +25,14 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
   };
 
   return (
-    <div className="map-wrapper">
+    <div className=" contact-us-text-wrapper contact-us-line-0 map-wrapper">
       <div
         style={{
           width: "96%",
           position: "absolute",
           border: "2px solid black",
           borderRadius: "25px",
-          height: "17%",
+          // height: "17%",
           bottom: "5%",
           background: "white",
           // backgroundImage: "url(/images/map_new.png)",

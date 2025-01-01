@@ -68,14 +68,15 @@ function App() {
           setIsMapVisible={setIsMapVisible}
         />
         {/* <div className={`map-container ${isMapVisible ? "visible" : "hidden"}`}> */}
-        {isMapVisible ? (
-          <Map
-            setSelectedImage={setSelectedImage}
-            selectedImage={selectedImage}
-          />
-        ) : null}
+
         {/* </div> */}
       </Suspense>
+      {isMapVisible ? (
+        <Map
+          setSelectedImage={setSelectedImage}
+          selectedImage={selectedImage}
+        />
+      ) : null}
     </div>
   );
 }

@@ -139,6 +139,27 @@ const MapControlBtns = ({
   isMapVisible,
   setIsMapVisible,
 }) => {
+  const [isMapIconClicked, setIsMapIconClicked] = useState(false);
+  const [isOrientationIconClicked, setIsOrientationIconClicked] =
+    useState(false);
+
+  const handleMapControlsViewClick = () => {
+    // Toggle the clicked state to trigger the animation
+    setIsMapIconClicked(true);
+
+    // Toggle the map visibility
+    setIsMapVisible(!isMapVisible);
+
+    // Remove the clicked state after the animation duration (300ms)
+    setTimeout(() => setIsMapIconClicked(false), 300);
+  };
+
+  const handleOrientationToggleClick = () => {
+    setIsOrientationIconClicked(true);
+    handleToggle();
+    setTimeout(() => setIsOrientationIconClicked(false), 300);
+  };
+
   return (
     <div
       style={{
@@ -146,14 +167,19 @@ const MapControlBtns = ({
         zIndex: 20,
         bottom: "28%",
         width: "auto",
-        right: "10%",
+        right: "1%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-evenly",
         alignItems: "flex-end",
       }}
     >
-      <button onClick={handleToggle} className="map-control-btn">
+      <button
+        onClick={handleOrientationToggleClick}
+        className={`map-control-btn ${
+          isOrientationIconClicked ? "clicked" : ""
+        }`}
+      >
         {/* Toggle Control: {controlType} */}
         <img
           style={{
@@ -169,9 +195,10 @@ const MapControlBtns = ({
         />
       </button>
       <button
-        className="map-control-btn"
+        className={`map-control-btn ${isMapIconClicked ? "clicked" : ""}`}
         style={{ marginTop: "1.5em" }}
-        onClick={() => setIsMapVisible(!isMapVisible)}
+        // onClick={() => setIsMapVisible(!isMapVisible)}
+        onClick={handleMapControlsViewClick}
       >
         <img
           style={{
