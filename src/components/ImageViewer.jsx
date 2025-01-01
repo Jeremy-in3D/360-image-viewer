@@ -171,13 +171,14 @@ export const MapControlBtns = ({
       style={{
         position: "absolute",
         zIndex: 20,
-        bottom: "28%",
+        bottom: "25%",
         width: "auto",
         right: "1%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-evenly",
         alignItems: "flex-end",
+        height: "16em",
       }}
     >
       <button
