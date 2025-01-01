@@ -13,7 +13,7 @@ const LazyImageViewer = lazy(() => import("./components/ImageViewer"));
 
 function App() {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isLoadingScreen, setIsLoadingScreen] = useState(false);
+  const [isLoadingScreen, setIsLoadingScreen] = useState(true);
   const [isMapVisible, setIsMapVisible] = useState(false);
   const [controlType, setControlType] = useState("orbit");
   const [permissionsGranted, setPermissionsGranted] = useState(false);
@@ -38,6 +38,14 @@ function App() {
     if (imageParam) {
       setSelectedImage(getImageBasedOnParam(imageParam));
     }
+  }, []);
+
+  useEffect(() => {
+    const loadingTimeout = setTimeout(() => {
+      setIsLoadingScreen(false);
+    }, 4000);
+
+    return () => clearTimeout(loadingTimeout);
   }, []);
 
   const getImageBasedOnParam = (param) => {
@@ -89,7 +97,7 @@ function App() {
 
   return (
     <div className="app-wrapper">
-      {false ? <LoadingScreen /> : null}
+      {isLoadingScreen ? <LoadingScreen /> : null}
       <Suspense fallback={<FallBackViewer />}>
         {/* <VidViewer
           videoSrc={

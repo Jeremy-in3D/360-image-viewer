@@ -108,29 +108,25 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #3b3a3a; /* example background color */
-  z-index: 10;
+  z-index: 50;
 }
 
 .image {
+  opacity: 0.3;
   filter: grayscale(100%);
-  animation: colorTransition 3s forwards;
+  animation: opacityTransition 2s forwards, grayscaleTransition 2s 2s forwards;
 }
 
-.overlay {
-  background: white;
-  animation: reveal 3s forwards;
-}
-
-@keyframes reveal {
+@keyframes opacityTransition {
   from {
-    left: 0;
+    opacity: 0.3;
   }
   to {
-    left: 100%;
+    opacity: 1;
   }
 }
 
-@keyframes colorTransition {
+@keyframes grayscaleTransition {
   from {
     filter: grayscale(100%);
   }

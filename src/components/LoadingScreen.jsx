@@ -17,12 +17,13 @@ export function LoadingScreen() {
           src="/images/logo-2.png"
           className="image"
           style={{
-            width: "100%",
+            borderRadius: "12px",
+            width: "60%",
             position: "relative",
             zIndex: 1,
           }}
         />
-        <div
+        {/* <div
           className="overlay"
           style={{
             position: "absolute",
@@ -33,7 +34,7 @@ export function LoadingScreen() {
             zIndex: 2,
             pointerEvents: "none", // Ensures the overlay doesn't block interactions
           }}
-        ></div>
+        ></div> */}
       </div>
     </div>
   );
