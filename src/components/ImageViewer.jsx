@@ -170,7 +170,7 @@ export const MapControlBtns = ({
     <div
       style={{
         position: "absolute",
-        zIndex: 20,
+        zIndex: 40,
         bottom: "25%",
         width: "auto",
         right: "1%",
