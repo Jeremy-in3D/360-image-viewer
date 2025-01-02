@@ -21,13 +21,7 @@ const usePreloadedTextures = (imagePaths) => {
   return textures;
 };
 
-function ImageViewer({
-  imageIndex,
-  isMapVisible,
-  setIsMapVisible,
-  controlType,
-  permissionsGranted,
-}) {
+function ImageViewer({ imageIndex, controlType, permissionsGranted }) {
   return (
     <div style={{ height: "100%", zIndex: 2 }}>
       <Canvas
@@ -56,7 +50,7 @@ const SphereImage = ({ imageIndex }) => {
 
   return (
     <mesh scale={[-1, 1, 1]}>
-      <sphereGeometry args={[500, 45, 30]} />
+      <sphereGeometry args={[500, 30, 20]} />
       <meshBasicMaterial map={texture} side={THREE.BackSide} />
     </mesh>
   );

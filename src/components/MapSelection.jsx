@@ -12,13 +12,13 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
   const getImagePlacementStyles = (image) => {
     switch (image) {
       case 0:
-        return {};
+        return { left: "2%" };
       case 1:
         return { left: "16.5%" };
       case 2:
-        return { left: "6%", top: "20%" };
+        return { left: "3.2%", top: "20%" };
       case 3:
-        return { top: "2%" };
+        return { top: "-3%" };
       default:
         return {};
     }

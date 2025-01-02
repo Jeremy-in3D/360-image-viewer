@@ -105,8 +105,6 @@ function App() {
 
         <LazyImageViewer
           imageIndex={selectedImage}
-          isMapVisible={isMapVisible}
-          setIsMapVisible={setIsMapVisible}
           controlType={controlType}
           permissionsGranted={permissionsGranted}
         />
