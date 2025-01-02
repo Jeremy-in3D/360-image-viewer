@@ -54,7 +54,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url("/public/images/logo-2.png");
+  background-image: url("/images/logo-2.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 50% auto;
@@ -135,14 +135,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #3b3a3a; /* example background color */
+  /* background-color: #3b3a3a;  */
+  background-color: black;
   z-index: 50;
 }
 
 .image {
   opacity: 0.3;
   filter: grayscale(100%);
-  animation: opacityTransition 2s forwards, grayscaleTransition 2s 2s forwards;
+  animation: opacityTransition 2s forwards, grayscaleTransition 1s 0.3s forwards;
 }
 
 @keyframes opacityTransition {
