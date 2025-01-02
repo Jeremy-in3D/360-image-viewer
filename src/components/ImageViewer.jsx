@@ -119,7 +119,7 @@ export const MapControlBtns = ({
         {/* Toggle Control: {controlType} */}
         <img
           style={{
-            width: "80px",
+            width: "60px",
             height: "100%",
             display: "block",
           }}
@@ -138,7 +138,7 @@ export const MapControlBtns = ({
       >
         <img
           style={{
-            width: "80px",
+            width: "60px",
             height: "100%",
             display: "block",
           }}
