@@ -7,7 +7,6 @@ const imagePaths = [
 
 export const Map = ({ selectedImage, setSelectedImage }) => {
   const images = [0, 1, 2, 3];
-  const numbers = [29, 48, 55, 95];
 
   const getImagePlacementStyles = (image) => {
     switch (image) {
@@ -24,7 +23,7 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
     }
   };
 
-  const selectedBorderColor = "1px solid red";
+  const selectedBorderColor = "1px solid rgb(255, 108, 0)";
 
   return (
     <div className="contact-us-text-wrapper contact-us-line-0 map-wrapper">
@@ -49,11 +48,11 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
             width: "100%",
           }}
         >
-          {images.map((image, idx) => (
+          {imagePaths.map((image, idx) => (
             <div
               key={`key-${idx}`}
               onClick={() =>
-                selectedImage == image ? null : setSelectedImage(image)
+                selectedImage == idx ? null : setSelectedImage(idx)
               }
               style={{
                 position: "relative",
@@ -62,7 +61,7 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
                     ? selectedBorderColor
                     : "1px solid black",
                 // border: selectedImage == image ? "1px solid black" : "",
-                backgroundImage: `url(${imagePaths[idx]})`,
+                backgroundImage: `url(${image})`,
                 ...getImagePlacementStyles(idx),
               }}
               className="image-preview"

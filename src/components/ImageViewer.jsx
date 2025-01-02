@@ -25,7 +25,7 @@ function ImageViewer({ imageIndex, controlType, permissionsGranted }) {
   return (
     <div style={{ height: "100%", zIndex: 2 }}>
       <Canvas
-        linear={true}
+        // linear={true}
         style={{ height: "100%" }}
         // toneMapping={THREE.NoToneMapping}
       >
@@ -107,7 +107,7 @@ export const MapControlBtns = ({
         flexDirection: "column",
         justifyContent: "space-evenly",
         alignItems: "flex-end",
-        height: "16em",
+        height: "14em",
       }}
     >
       <button
