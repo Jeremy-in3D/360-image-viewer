@@ -97,6 +97,7 @@ export const MapControlBtns = ({
 
   return (
     <div
+      className="controls-ani controls-ani-delay"
       style={{
         position: "absolute",
         zIndex: 40,
