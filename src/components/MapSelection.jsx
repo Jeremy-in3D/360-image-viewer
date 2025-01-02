@@ -18,11 +18,13 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
       case 2:
         return { left: "3.2%", top: "20%" };
       case 3:
-        return { top: "-3%" };
+        return { top: "-8%", right: "2%" };
       default:
         return {};
     }
   };
+
+  const selectedBorderColor = "1px solid red";
 
   return (
     <div className="contact-us-text-wrapper contact-us-line-0 map-wrapper">
@@ -55,7 +57,10 @@ export const Map = ({ selectedImage, setSelectedImage }) => {
               }
               style={{
                 position: "relative",
-                border: "1px solid black",
+                border:
+                  selectedImage == idx
+                    ? selectedBorderColor
+                    : "1px solid black",
                 // border: selectedImage == image ? "1px solid black" : "",
                 backgroundImage: `url(${imagePaths[idx]})`,
                 ...getImagePlacementStyles(idx),
