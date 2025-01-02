@@ -31,6 +31,9 @@ body {
   text-align: center;
   display: flex;
   flex-direction: column;
+  background-image: url("/public/images/logo-2.png");
+  background-position: center;
+  background-repeat: no-repeat;
   /* justify-content: space-evenly; */
 }
 
