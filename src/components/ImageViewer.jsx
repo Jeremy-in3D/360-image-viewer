@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { CameraController } from "./scene/CameraController";
 // import { SphereImage } from "./scene/SphereImage";
 import {
+  Preload,
   useTexture,
   // Sphere,
   // useVideoTexture,
@@ -29,6 +30,7 @@ function ImageViewer({ imageIndex, controlType, permissionsGranted }) {
         style={{ height: "100%" }}
         // toneMapping={THREE.NoToneMapping}
       >
+        <Preload all />
         <ambientLight />
         <CameraController
           controlType={controlType}
