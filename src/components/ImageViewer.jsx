@@ -27,12 +27,12 @@ function ImageViewer({ imageIndex, controlType, permissionsGranted }) {
   return (
     <div style={{ height: "100%", zIndex: 2 }}>
       <Canvas
-        // linear={true}
+        linear={true}
         style={{ height: "100%" }}
-        // tonemapping={THREE.NoToneMapping}
+        tonemapping={THREE.NoToneMapping}
       >
         <Preload all />
-        <ambientLight />
+        {/* <ambientLight /> */}
         <CameraController
           controlType={controlType}
           permissionsGranted={permissionsGranted}
@@ -53,7 +53,7 @@ const SphereImage = ({ imageIndex }) => {
 
   return (
     <mesh scale={[-1, 1, 1]}>
-      <sphereGeometry args={[500, 36, 28]} />
+      <sphereGeometry args={[500, 40, 30]} />
       <meshBasicMaterial map={texture} side={THREE.BackSide} />
     </mesh>
   );
