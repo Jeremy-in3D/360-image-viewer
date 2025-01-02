@@ -7,6 +7,46 @@ import {
 } from "@react-three/drei";
 import * as THREE from "three";
 
+// export const CameraController = ({ controlType, permissionsGranted }) => {
+//   const { camera } = useThree();
+//   const controlsRef = useRef();
+//   const animData = useRef({ alpha: 0, beta: 0, gamma: 0 });
+
+//   const handleOrientation = (event) => {
+//     animData.current.alpha = event.alpha || 0;
+//     animData.current.beta = event.beta || 0;
+//     animData.current.gamma = event.gamma || 0;
+//   };
+
+//   useEffect(() => {
+//     if (controlType === "device" && permissionsGranted) {
+//       window.addEventListener("deviceorientation", handleOrientation, true);
+//     }
+//     return () => {
+//       window.removeEventListener("deviceorientation", handleOrientation, true);
+//     };
+//   }, [controlType, permissionsGranted]);
+
+//   useFrame(() => {
+//     if (controlType === "device" && animData.current) {
+//       const { alpha, beta } = animData.current;
+//       camera.rotation.set(
+//         THREE.MathUtils.degToRad(-(90 - beta)),
+//         THREE.MathUtils.degToRad(alpha),
+//         0,
+//         "YXZ"
+//       );
+//     }
+//     if (controlType === "orbit" && controlsRef.current) {
+//       controlsRef.current.update();
+//     }
+//   });
+
+//   return controlType === "orbit" ? (
+//     <OrbitControls ref={controlsRef} enableZoom={false} />
+//   ) : null;
+// };
+
 export const CameraController = ({ controlType, permissionsGranted }) => {
   const { camera } = useThree();
   const controlsRef = useRef();
@@ -30,8 +70,12 @@ export const CameraController = ({ controlType, permissionsGranted }) => {
   useFrame(() => {
     if (controlType === "device" && animData.current) {
       const { alpha, beta } = animData.current;
+
+      // Clamp the beta value to limit up/down rotation (e.g., -45 to 45 degrees)
+      const clampedBeta = THREE.MathUtils.clamp(beta, -45, 45);
+
       camera.rotation.set(
-        THREE.MathUtils.degToRad(-(90 - beta)),
+        THREE.MathUtils.degToRad(-(90 - clampedBeta)),
         THREE.MathUtils.degToRad(alpha),
         0,
         "YXZ"
