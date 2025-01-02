@@ -2,7 +2,7 @@ import React, { useEffect, useState, Suspense, lazy } from "react";
 import "./App.css";
 import { Map } from "./components/MapSelection";
 import { LoadingScreen } from "./components/LoadingScreen";
-import { MapControlBtns } from "./components/ImageViewer";
+import { MapControlBtns } from "./components/MapControlBtns";
 // import VidViewer from "./components/ImageViewer";
 
 const LazyImageViewer = lazy(() => import("./components/ImageViewer"));
