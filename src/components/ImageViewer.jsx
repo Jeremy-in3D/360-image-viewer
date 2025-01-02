@@ -110,7 +110,7 @@ export const MapControlBtns = ({
         flexDirection: "column",
         justifyContent: "space-evenly",
         alignItems: "flex-end",
-        height: "14em",
+        height: "12em",
       }}
     >
       <button
