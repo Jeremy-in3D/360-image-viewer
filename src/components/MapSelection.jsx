@@ -149,7 +149,7 @@ export const Map = ({ selectedImage, setSelectedImage, isMapVisible }) => {
                     ? selectedBorderColor
                     : "1px solid black",
                 // Example placeholder for image background
-                backgroundImage: image,
+                backgroundImage: `url(${image})`,
                 ...getImagePlacementStyles(idx),
               }}
               className="image-preview"
