@@ -128,12 +128,13 @@ function App() {
         isMapVisible={isMapVisible}
         setIsMapVisible={setIsMapVisible}
       />
-      {isMapVisible ? (
-        <Map
-          setSelectedImage={setSelectedImage}
-          selectedImage={selectedImage}
-        />
-      ) : null}
+      {/* {isMapVisible ? ( */}
+      <Map
+        setSelectedImage={setSelectedImage}
+        selectedImage={selectedImage}
+        isMapVisible={isMapVisible}
+      />
+      {/* ) : null} */}
     </div>
   );
 }
