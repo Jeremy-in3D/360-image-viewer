@@ -26,9 +26,9 @@ function ImageViewer({ imageIndex, controlType, permissionsGranted }) {
   return (
     <div style={{ height: "100%", zIndex: 2 }}>
       <Canvas
-        // linear={true}
+        linear={true}
         style={{ height: "100%" }}
-        // tonemapping={THREE.NoToneMapping}
+        tonemapping={THREE.NoToneMapping}
       >
         <Preload all />
         {/* <ambientLight /> */}
