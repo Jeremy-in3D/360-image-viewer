@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 
 const imagePaths = [
   "/images/29_Final_cmpr.webp",
-  "/images/48_Final_cmpr.png",
-  "/images/55_Final_cmpr.png",
-  "/images/95_Final_cmpr.png",
+  "/images/48_Final_cmpr.webp",
+  "/images/55_Final_cmpr.webp",
+  "/images/95_Final_cmpr.webp",
 ];
 
 export const Map = ({ selectedImage, setSelectedImage, isMapVisible }) => {
