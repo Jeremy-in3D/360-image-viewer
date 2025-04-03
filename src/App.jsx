@@ -92,11 +92,10 @@ function App() {
     setControlType((prev) => (prev === "orbit" ? "device" : "orbit"));
   };
 
-  // This effect is used to preload the map image.
   useEffect(() => {
     const preloadMapImage = () => {
       const img = new Image();
-      img.src = "/images/map_new.png"; // your map image path
+      img.src = "/images/map_new.png";
     };
 
     preloadMapImage();
